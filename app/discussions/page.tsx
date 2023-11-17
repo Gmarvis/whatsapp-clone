@@ -179,7 +179,7 @@ const Discossions = () => {
   //  }
 
   return (
-    <>
+    <div className="overflow-hidden">
       {showPPicture ? (
         <ShowProfilePicture>
           <div className=" w-full h-full bg-white/90 flex flex-col justify-start pt-20  items-center z-100">
@@ -387,7 +387,7 @@ const Discossions = () => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 
