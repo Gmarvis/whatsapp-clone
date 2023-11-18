@@ -254,7 +254,7 @@ const Discossions = () => {
                         ? "bg-whatsappdashimg bg-no-repeat bg-cover"
                         : "bg-whatsappimg pb-10"
                     }  border-r border-r-gray-300 z-0`
-                  : `relative w-[75vw] bg-whatsappdashimg z-0 pb-10 ${
+                  : `relative w-[75vw] bg-whatsappdashimg bg-fixed z-0 pb-10 ${
                       !start
                         ? "bg-whatsappdashimg bg-no-repeat bg-cover"
                         : "bg-whatsappimg"
