@@ -307,7 +307,7 @@ const Discossions = () => {
                 </div>
               </div>
 
-              <div className=" w-full flex flex-col mt-16 px-10 h-full overflow-y-auto ">
+              <div className=" w-full flex flex-col mt-14 px-10 h-full overflow-y-auto ">
                 {discussionsMessages.length ? (
                   <Messages
                     messageList={discussionsMessages}
