@@ -265,7 +265,7 @@ const Discossions = () => {
                 className={
                   !start
                     ? "hidden"
-                    : "flex items-center bg-bgGray max-h-16 justify-between w-full h-max-5 px-3 py-2 cursor-pointer top-0 fixed"
+                    : "flex items-center bg-bgGray max-h-16 justify-between w-full h-max-5 px-3 py-2 cursor-pointer fixed top-0 z-10"
                 }
               >
                 <div
@@ -307,7 +307,7 @@ const Discossions = () => {
                 </div>
               </div>
 
-              <div className=" w-full flex flex-col mt-14 px-10 h-full overflow-y-auto ">
+              <div className="w-full mt-10 px-10 h-full overflow-y-auto z-0">
                 {discussionsMessages.length ? (
                   <Messages
                     messageList={discussionsMessages}
