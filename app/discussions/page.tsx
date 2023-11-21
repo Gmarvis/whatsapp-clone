@@ -313,7 +313,7 @@ const Discossions = () => {
                 className={
                   openProfile || importPict
                     ? "hidden"
-                    : "flex items-center max-h-16 justify-between bg-bgGray w-full h-max-5 px-3 py-2 border-r z-0"
+                    : "flex items-center max-h-16 justify-between bg-bgGray w-full h-max-5 px-3 py-2 border-r z-0 top-0 fixed"
                 }
               >
                 <Avatar
@@ -342,6 +342,8 @@ const Discossions = () => {
                   )}
                 </div>
               </div>
+
+
               <DirectMessage
                 users={users}
                 groups={groups}
@@ -352,6 +354,7 @@ const Discossions = () => {
                 setRecipient={setRecipient}
               />
             </div>
+
             <div
               ref={ref}
               className={
@@ -372,7 +375,7 @@ const Discossions = () => {
                 className={
                   !start
                     ? "hidden"
-                    : "flex items-center bg-bgGray max-h-16 justify-between w-full h-max-5 px-3 py-2 cursor-pointer"
+                    : "flex items-center bg-bgGray max-h-16 justify-between w-full h-max-5 px-3 py-2 cursor-pointer top-0 fixed"
                 }
               >
                 <div
@@ -419,7 +422,7 @@ const Discossions = () => {
                 </div>
               </div>
 
-              <div className=" w-full flex flex-col mt-3 px-10 h-[80vh] overflow-y-auto ">
+              <div className=" w-full flex flex-col mt-16 px-10 h-full overflow-y-auto ">
                 {discussionsMessages.length ? (
                   <Messages
                     messageList={discussionsMessages}
