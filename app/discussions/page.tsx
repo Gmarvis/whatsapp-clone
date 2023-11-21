@@ -288,7 +288,7 @@ const Discossions = () => {
     <div className="overflow-hidden">
       {showPPicture ? (
         <ShowProfilePicture>
-          <div className=" w-full h-full bg-white/90 flex flex-col justify-start pt-20  items-center z-100">
+          <div className=" w-full h-full bg-white/90 flex flex-col justify-start pt-20 items-center z-100">
             <Image
               src={
                 profilepict ||
@@ -305,7 +305,7 @@ const Discossions = () => {
         <>
           <UploadPicture />
           <div className={importPict ? "hidden" : "flex w-full "}>
-            <div className="bg-white w-[25vw] h-screen">
+            <div className="bg-white w-[25vw] h-screen overflow-hidden">
               <ProfilePage title="Profil">
                 <ProfilePageContent />
               </ProfilePage>
@@ -343,30 +343,35 @@ const Discossions = () => {
                 </div>
               </div>
 
-
-              <DirectMessage
-                users={users}
-                groups={groups}
-                setReceiver={setReceiver}
-                className="overflow-scroll overscroll-y-contain h-fit "
-                setRoomObject={setRoomObject}
-                setUsers={setUsers}
-                setRecipient={setRecipient}
-              />
+              <div
+                className="overflow-y-scroll h-full fixed w-[25vw] z-0"
+                // style={{ scrollbarWidth: "none", "-ms-overflow-style": "none" }}
+              >
+                <DirectMessage
+                  users={users}
+                  groups={groups}
+                  setReceiver={setReceiver}
+                  setRoomObject={setRoomObject}
+                  setUsers={setUsers}
+                  setRecipient={setRecipient}
+                />
+              </div>
             </div>
 
             <div
               ref={ref}
               className={
                 openSideNav || openContactInfo
-                  ? `relative w-[50vw] ${!start
-                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                    : "bg-whatsappimg pb-10"
-                  }  border-r border-r-gray-300 z-0`
-                  : `relative w-[75vw] bg-whatsappdashimg bg-fixed z-0 pb-10 ${!start
-                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                    : "bg-whatsappimg"
-                  }`
+                  ? `relative w-[50vw] ${
+                      !start
+                        ? "bg-whatsappdashimg bg-no-repeat"
+                        : "bg-whatsappimg pb-10"
+                    }  border-r border-r-gray-300 z-0`
+                  : `relative w-[75vw] bg-whatsappdashimg bg-fixed z-0 pb-10 ${
+                      !start
+                        ? "bg-whatsappdashimg bg-no-repeat bg-cover"
+                        : "bg-whatsappimg"
+                    }`
               }
             >
               <div
@@ -443,8 +448,8 @@ const Discossions = () => {
                   !start
                     ? "hidden"
                     : openSideNav || openContactInfo
-                      ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
-                      : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                    ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                    : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
                 }
               >
                 {showDropdrownBottonL && <DropDownR ref={dropdownRef} />}
