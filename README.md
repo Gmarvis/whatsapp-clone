@@ -7,15 +7,10 @@
  WhatsApp Web Clone
 </h1>
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+![WhatsApp Web Clone](/path/to/your/image.png)
+
+This project is a clone of WhatsApp Web built using Supabase and Next.js. It aims to replicate the core functionality of WhatsApp Web, allowing users to send and receive messages through a web interface.
+
 
 ## Features
 
@@ -36,6 +31,10 @@
 
 You can view a fully working demo at [https://waxchat.vercel.app/](https://https://waxchat.vercel.app/).
 
+## Project Description
+
+This project was assigned to us as part of our school curriculum to enhance our web development skills and gain hands-on experience with modern web technologies. Our goal is to learn and apply the concepts of real-time communication, user authentication, and responsive design in the context of building a WhatsApp Web clone.
+
 ## Getting Started
 
 To get started with the WhatsApp Web Clone, follow these steps:
@@ -49,6 +48,12 @@ To get started with the WhatsApp Web Clone, follow these steps:
    - Configure Supabase in the project by adding the URL and API key to the environment variables.
 5. Start the development server: `npm run dev`
 6. Open your browser and visit `http://localhost:3000` to access the WhatsApp Web Clone.
+
+## Acknowledgements
+
+We would like to acknowledge our school for assigning this project to us as part of our learning journey. This project provides us with an opportunity to explore and apply new technologies and concepts in the field of web development. We are grateful for the guidance and support provided by our teachers and mentors throughout this project.
+
+- The WhatsApp Web interface served as inspiration for this project.
 
 <!-- ## Deploy to Vercel
 
