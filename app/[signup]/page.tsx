@@ -18,7 +18,7 @@ const Signupb = () => {
       localStorage.getItem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}"
     );
 
-    localStorage.setItem("email", googleUser.user.email);
+    LOCAL_STORAGE.save("email", googleUser.user.email);
 
     const { data, error } = await supabase
       .from("user")
