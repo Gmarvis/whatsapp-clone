@@ -38,6 +38,9 @@ const nextConfig = {
       {
         hostname: "bestcompaniesaz.com"
       },
+      {
+        hostname: "lh3.googleusercontent.com"
+      }
     ],
   },
 };

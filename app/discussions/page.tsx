@@ -44,14 +44,16 @@ import getAllGroupsPerUser from "@/utils/queries/getAllGroups";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { useRouter } from "next/navigation";
 
-import Header from "@/components/profilPage/Header";
-
 // import { useWhatSappContext } from "@/components/context";
 
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
 
+  const email: string = (localStorage.getItem("email") as string);
   const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>(() =>
+    JSON.parse(localStorage.getItem("sender") || "{}")
+  ); // state containing the user info
   const [groups, setGroups] = useState<Group[]>([]);
   const [rooms, setRooms] = useState<Promise<any[] | undefined>[]>([]);
   const [userInGroupsCreations, setUserInGroupsCreations] = useState<User[]>(
@@ -60,9 +62,6 @@ const Discossions = () => {
   const [message, setMessage] = useState<string>("");
   const [updateUsers, setUpdateUsers] = useState<boolean>(false);
   const [recipient, setRecipient] = useState<User>();
-  const [currentUser, setCurrentUser] = useState<User>(() =>
-    JSON.parse(localStorage.getItem("sender") || "{}")
-  ); // state containing the user info
   const [showDropdrownleft, setShowDropdownleft] = useState<boolean>(false);
   const [userGroupsId, setUserGroupsId] = useState<string[]>([]);
   const [currentUserRoomId, setCurreUserRoomId] = useState<string>("");
@@ -81,21 +80,21 @@ const Discossions = () => {
   const router = useRouter();
   const [imageUrl, setImageUrl] = useState("");
 
-  if (!currentUser) router.push("/");
+  // if (!email && !currentUser) router.push("/");
+
   const {
     setOpenSideNav,
     openSideNav,
     showPPicture,
     importPict,
     profilepict,
-    profileImage,
-    setProfileImage,
     start,
     isDark,
     setIsDark,
     label,
     setLabel,
     addedGroup, //to make the the page re-render to get new group added
+    setAddedGroup,
   } = useWhatSappContext();
   const { openContactInfo, setOpenContactInfo } = useWhatSappContactContext();
   const { openProfile, setOpenProfile } = useProfileContext();
@@ -125,10 +124,10 @@ const Discossions = () => {
   };
 
   useEffect(() => {
-    fetchSignupUser()
+    fetchSignupUser(currentUser?.email as string)
       .then((data) => {
-        setCurrentUser(data);
-        setProfileImage(data.image);
+        console.log(data)
+        // setCurrentUser(data);
       })
       .catch((err) => {
         if (err instanceof Error) console.error(err);
@@ -141,6 +140,7 @@ const Discossions = () => {
           setUserGroupsId(users.groups);
           setUserInGroupsCreations(users.data);
           setCurreUserRoomId(users.currentUserRoomId);
+          setAddedGroup(false);
         }
       })
       .catch((err) => {
@@ -150,15 +150,16 @@ const Discossions = () => {
     if (ref.current !== null)
       ref.current.addEventListener("click", handleClickOutSide);
     return () => document.removeEventListener("click", handleClickOutSide);
-  }, [updateUsers, addedGroup]);
+  }, [addedGroup]);
+  console.log('this is currentUser', currentUser)
 
   // this is useEffect is mainly to let user setup their profile after the have signup
-  useEffect(() => {
-    setImageUrl(LOCAL_STORAGE.get("imageURL"));
-    // i am using this localhost image to check if the use have setup his/her profile
-  }, []);
+  // useEffect(() => {
+  //   setImageUrl(LOCAL_STORAGE.get("imageURL"));
+  //   // i am using this localhost image to check if the use have setup his/her profile
+  // }, []);
 
-  console.log("these are groups", groups);
+  // console.log("these are groups", groups);
   useEffect(() => {
     setDiscussionsMessages([]);
     getMessages(
@@ -177,7 +178,7 @@ const Discossions = () => {
                 receiver_room_id: currentUserRoomId,
               }))
             );
-            setIsGroupdiscussion(true);
+            setIsGroupdiscussion(true); //to help display group messages with sender name.
           } else {
             console.log("all messages: ", messages);
             setIsGroupdiscussion(false);
@@ -212,6 +213,8 @@ const Discossions = () => {
       sender_id: currentUser.id as string,
       receiver_room_id: receiver?.id as string,
       content: message,
+      sender_name: currentUser?.name,
+      phone_number: currentUser?.phone as string,
     };
     // console.log('receiver_room_id', receiver?.id)
 
@@ -243,8 +246,6 @@ const Discossions = () => {
 
         if (payload.eventType === "INSERT")
           if (userGroupsId?.includes(payload.new.receiver_room_id)) {
-            // setGroupMessageDiscussions(payload.new.content);
-            // setDiscussionsMessages((prev) => [...prev, payload.new]);
             groupMembersIds?.map((memberId) => {
               supabase
                 .channel(`group_:${payload.new.receiver_room_id}`)
@@ -273,11 +274,6 @@ const Discossions = () => {
       }
     )
     .subscribe();
-
-  // Simple function to log any messages we receive
-  function messageReceived(payload: any) {
-    console.log(payload);
-  }
 
   return (
     <>
@@ -314,7 +310,6 @@ const Discossions = () => {
                 <Avatar
                   onClick={() => setOpenProfile(true)}
                   profilePicture={
-                    profilepict ||
                     currentUser?.image ||
                     "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
                   }
@@ -322,7 +317,7 @@ const Discossions = () => {
                 />
 
                 <div className="flex gap-5">
-                  <Header switchTheme={switchTheme} label={label} />
+                  {/* <Header switchTheme={switchTheme} label={label} /> */}
                   <button className="text-2xl text-gray-600">
                     <MdGroups2 />
                   </button>
@@ -352,16 +347,14 @@ const Discossions = () => {
               ref={ref}
               className={
                 openSideNav || openContactInfo
-                  ? `relative w-[50vw] ${
-                      !start
-                        ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                        : "bg-whatsappimg pb-10"
-                    }  border-r border-r-gray-300 z-0`
-                  : `relative w-[75vw] bg-whatsappdashimg z-0 pb-10 ${
-                      !start
-                        ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                        : "bg-whatsappimg"
-                    }`
+                  ? `relative w-[50vw] ${!start
+                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
+                    : "bg-whatsappimg pb-10"
+                  }  border-r border-r-gray-300 z-0`
+                  : `relative w-[75vw] bg-whatsappdashimg z-0 pb-10 ${!start
+                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
+                    : "bg-whatsappimg"
+                  }`
               }
             >
               <div
@@ -438,8 +431,8 @@ const Discossions = () => {
                   !start
                     ? "hidden"
                     : openSideNav || openContactInfo
-                    ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
-                    : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                      ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                      : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
                 }
               >
                 {showDropdrownBottonL && <DropDownR ref={dropdownRef} />}
@@ -502,9 +495,8 @@ const Discossions = () => {
           {!profilepict ||
             (!currentUser?.image && (
               <div
-                className={`bg-themecolor ${
-                  openProfile ? "hidden" : "visible"
-                } flex justify-between items-center fixed w-full p-5`}
+                className={`bg-themecolor ${openProfile ? "hidden" : "visible"
+                  } flex justify-between items-center fixed w-full p-5`}
               >
                 <p>Welcome to WhatsApp Clone..!</p>
                 <button

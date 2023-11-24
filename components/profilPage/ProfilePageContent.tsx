@@ -134,6 +134,12 @@ const ProfilePageContent = () => {
                 >
                   <AiOutlineCheck size={23} />
                 </span>
+                <span
+                  className=" mr-0 cursor-pointer"
+                  onClick={() => handleUpdateName(profileName)}
+                >
+                  <AiOutlineCheck size={23} />
+                </span>
               </div>
             </div>
           )}

@@ -38,6 +38,8 @@ type Message = {
   updated_at?: string;
   emoji?: string;
   receiver_room_id?: string;
+  sender_name?: string;
+  phone_number?: string;
 };
 
 type Group = {

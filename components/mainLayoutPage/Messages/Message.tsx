@@ -25,7 +25,7 @@ type Props = {
   isGroupdiscussion: boolean;
 };
 const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const [target, setTarget] = useState<string>(props.messageList[0].content);
+  const [target, setTarget] = useState<string>(props.messageList[0].id);
   const [emojie, setEmojie] = useState<string>();
   const [messageId, setMessageId] = useState<string>("");
   const [oldmessageId, setOldmessageId] = useState<string>("");
@@ -34,11 +34,11 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const classForMessageReceiver = "align-left";
   const classForMessageSender = "box-row align-right";
 
-  const handleTargetEmoji = async (targetEmoji: string, id: string) => {
-    if (targetEmoji === target) {
+  const handleTargetEmoji = async (id: string) => {
+    if (id === target) {
       props.setMessageEmoji((prev) => !prev);
     }
-    setTarget(targetEmoji);
+    setTarget(id);
     setMessageId(id);
   };
 
@@ -50,7 +50,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
       .from("messages")
       .update({
         sender_id: props.currentUser.id,
-        receiver_id: props.receiver?.id,
+        receiver_room_id: props.receiver?.id,
         emoji: emoji,
       })
       .eq("id", messageId)
@@ -82,8 +82,8 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
                 .split("T")[1]
                 .split(".")[0]
                 .slice(0, 5)}
-              senderName={props.recipient ? props.recipient.name : ""}
-              phoneNumber={props.recipient ? props.recipient.phone : ""}
+              senderName={sortMessageList[0].sender_name}
+              phoneNumber={sortMessageList[0].phone_number}
             />
           ) : (
             <ReceiverMessages
@@ -96,17 +96,12 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           )}
           <span
             className=" opacity-0 hover:opacity-100 mx-1  hover:block p-[5px] rounded-full bg-[#a3adb3a7] "
-            onClick={() =>
-              handleTargetEmoji(
-                sortMessageList[0].content,
-                sortMessageList[0].id
-              )
-            }
+            onClick={() => handleTargetEmoji(sortMessageList[0].id)}
           >
             <FaFaceGrinWide className=" text-white" size={20} />
           </span>
         </div>
-        {props.showMessageEmoji && sortMessageList[0].content === target && (
+        {props.showMessageEmoji && sortMessageList[0].id === target && (
           <EmojiMessage
             setEmojie={getEmoji}
             classname=" translate-x-[10%]"
@@ -131,7 +126,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
   ) {
     content = (
       <>
-        {props.showMessageEmoji && sortMessageList[0].content === target && (
+        {props.showMessageEmoji && sortMessageList[0].id === target && (
           <EmojiMessage
             setEmojie={getEmoji}
             classname="absolute top-[250px] right-[300px]"
@@ -141,12 +136,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
         <div className="flex justify-end">
           <span
             className="w-10 h-10 flex justify-center items-center opacity-0 hover:opacity-100 mx-1  hover:block p-[5px] rounded-full bg-[#a3adb3a7] cursor-pointer"
-            onClick={() =>
-              handleTargetEmoji(
-                sortMessageList[0].content,
-                sortMessageList[0].id
-              )
-            }
+            onClick={() => handleTargetEmoji(sortMessageList[0].id)}
           >
             <FaFaceGrinWide
               className=" text-white  mr-[5px] mb-[5px] ml-[5px] "
@@ -179,7 +169,6 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
               className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out  translate-y-[-10px] translate-x-[-20px]
           "
             >
-              {/*  absolute z-10 top-[265px] right-[100px] */}
               {sortMessageList[0].emoji}
             </span>
           ) : (
@@ -204,18 +193,18 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
               <SimpleMessage
                 content={messages.content}
                 styleStyle={classForMessageReceiver}
-                time={sortMessageList[0].created_at
+                time={messages.created_at
                   .split("T")[1]
                   .split(".")[0]
                   .slice(0, 5)}
-                senderName={props.recipient ? props.recipient.name : ""}
-                phoneNumber={props.recipient ? props.recipient.phone : ""}
+                senderName={messages.sender_name}
+                phoneNumber={messages.phone_number}
               />
             ) : (
               <SimpleMessage
                 content={messages.content}
                 styleStyle={classForMessageReceiver}
-                time={sortMessageList[0].created_at
+                time={messages.created_at
                   .split("T")[1]
                   .split(".")[0]
                   .slice(0, 5)}
@@ -223,13 +212,13 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
             )}
             <span
               className=" opacity-0 hover:opacity-100 mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
-              onClick={() => handleTargetEmoji(messages.content, messages.id)}
+              onClick={() => handleTargetEmoji(messages.id)}
             >
               <FaFaceGrinWide className=" text-white" size={20} />
             </span>
           </div>
 
-          {props.showMessageEmoji && messages.content === target && (
+          {props.showMessageEmoji && messages.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
               classname=" translate-x-[10%]"
@@ -255,7 +244,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
     ) {
       return (
         <>
-          {props.showMessageEmoji && messages.content === target && (
+          {props.showMessageEmoji && messages.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
               classname="absolute top-[250px] right-[300px]"
@@ -265,7 +254,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           <div className="flex justify-end" key={i}>
             <span
               className=" opacity-0 hover:opacity-100 mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
-              onClick={() => handleTargetEmoji(messages.content, messages.id)}
+              onClick={() => handleTargetEmoji(messages.id)}
             >
               <FaFaceGrinWide className=" text-white" size={20} />
             </span>

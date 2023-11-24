@@ -8,7 +8,6 @@ type Props = {
 const Emojis = ["🙏", "❤️", "😂", "😮", "😥", "👍"];
 
 const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
-  // const EmojiMessage = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState("");
   const handleEmojie = async (emoji: string) => {
     await props.setEmojie(emoji);

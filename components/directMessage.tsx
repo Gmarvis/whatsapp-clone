@@ -9,8 +9,8 @@ import { PartRoomUser, User, Group, Room } from "@/type";
 import { useWhatSappContext } from "./context";
 import { useProfileContext } from "./context/profileContext";
 import fetchSingleRoom from "@/utils/queries/fetchSingleRoom";
-import relativeTime from 'dayjs/plugin/relativeTime'
-import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
 import fetchGroupsOfSingleUser from "@/utils/queries/fetchGroupsOfSingleUser";
 import getAllGroupsPerUser from "@/utils/queries/getAllGroups";
 import { AiOutlineConsoleSql } from "react-icons/ai";
@@ -38,9 +38,10 @@ const DirectMessage = ({
 }: Props) => {
   // to style the select room
   const [target, setTarget] = useState("");
-  const [fetchedGroups, setFetchedGroups] = useState<Promise<any> | undefined>()
-  dayjs.extend(relativeTime)
-
+  const [fetchedGroups, setFetchedGroups] = useState<
+    Promise<any> | undefined
+  >();
+  dayjs.extend(relativeTime);
 
   // console.log(users);
 
@@ -74,7 +75,7 @@ const DirectMessage = ({
 
   return (
     <div className={` ${openProfile ? "hidden" : className} `}>
-      {users.length ? (
+      {users.reverse().length ? (
         <div className="flex gap-2 p-0 w-full h-[85vh] flex-col">
           {users?.map((item: any) => (
             <div
@@ -82,8 +83,8 @@ const DirectMessage = ({
               key={item.id}
               className={
                 target === item.user_id
-                  ? "bg-gray-300 flex w-full justify-between border-b border-slate-100 py-1 gap-5 hover:cursor-pointer px-4 items-center "
-                  : "flex w-full justify-between border-b border-slate-100  gap-5 hover:bg-gray-100 hover:cursor-pointer px-4 py-1 items-center "
+                  ? "bg-gray-300 flex w-full justify-between border-b border-slate-100 py-1 gap-1 hover:cursor-pointer px-4 items-center "
+                  : "flex w-full justify-between border-b border-slate-100  gap-1 hover:bg-gray-100 hover:cursor-pointer px-4 py-1 items-center "
               }
             >
               <div className="flex items-center gap-3 ">
@@ -117,7 +118,10 @@ const DirectMessage = ({
                 <span className="mx-auto ">
                   {dayjs().to(dayjs(item?.updated_at))}
                 </span>
-                <button className="hover:bg-gray-300 rounded-full w-fit self-center" onClick={() => removeMember(item.id)}>
+                <button
+                  className="hover:bg-gray-300 rounded-full w-fit self-center"
+                  onClick={() => removeMember(item.id)}
+                >
                   <IoIosClose size={20} />
                 </button>
               </div>

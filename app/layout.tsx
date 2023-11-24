@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 // import { GeistSans } from "geist/font";
 import "./globals.css";
 import type { Metadata } from "next";
@@ -9,32 +9,26 @@ import {
 import { WhatSappContactContextProvider } from "@/components/context/Context";
 import { ProfileContextProvider } from "@/components/context/profileContext";
 import Pulsation from "./[signup]/component/PulseLoader";
-import { CssBaseline } from "@mui/material";
 import { Suspense, useState } from "react";
-import { ThemeProvider } from "@mui/material/styles";
-import { darkTheme, lightTheme } from "@/utils/service/theme";
-import Header from "@/components/profilPage/Header";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-// const metadata: Metadata = {
-//   metadataBase: new URL(defaultUrl),
-//   title: "WhatsApp Clone App",
-//   description: "Reimplementing WhatsApp features with NextJS and Supabase",
-// };
+export const metadata: Metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "WhatsApp Clone App",
+  description: "Reimplementing WhatsApp features with NextJS and Supabase",
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const [isDark, setIsDark] = useState(false);
-  // const [label, setLabel] = useState("Night");
-  const { isDark } = useWhatSappContext();
+  // const { isDark } = useWhatSappContext();
 
-  console.log(isDark);
+  // console.log(isDark);
 
   return (
     <html dir="ltr" lang="en">
@@ -53,10 +47,10 @@ export default function RootLayout({
                       </div>
                     }
                   >
-                    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-                      <CssBaseline />
-                      <body>{children}</body>
-                    </ThemeProvider>
+                    {/* <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                      <CssBaseline /> */}
+                    {children}
+                    {/* </ThemeProvider> */}
                   </Suspense>
                 </ProfileContextProvider>
               </WhatSappContactContextProvider>{" "}
