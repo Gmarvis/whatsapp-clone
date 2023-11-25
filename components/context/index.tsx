@@ -12,6 +12,8 @@ import {
 type WhatSappContextType = {
   openSideNav: boolean;
   showPPicture: boolean;
+  showCamera: boolean;
+  opendocs: any;
   openCreateGroup: boolean;
   importPict: boolean;
   profilepict: string;
@@ -21,6 +23,8 @@ type WhatSappContextType = {
   addedGroup: boolean;
   isDark: boolean;
   label: string;
+  setShowCamera: Dispatch<SetStateAction<boolean>>;
+  setOpendocs: Dispatch<SetStateAction<any>>;
   setLabel: Dispatch<SetStateAction<string>>;
   setIsDark: Dispatch<SetStateAction<boolean>>;
   setAddedGroup: Dispatch<SetStateAction<boolean>>;
@@ -62,6 +66,10 @@ const initContextState: WhatSappContextType = {
   setOpenCreateGroup: (openCreateGroup) => !openCreateGroup,
   setOpenSideNav: (openSideNav) => !openSideNav,
   setImportPict: (importPict) => !importPict,
+  showCamera: false,
+  setShowCamera: (showCamera) => !showCamera,
+  opendocs: "",
+  setOpendocs: (opendocs) => !opendocs,
 };
 
 export const WhatSappContext =
@@ -76,6 +84,8 @@ export const WhatSappContextProvider = ({ children }: any) => {
   const [profilepict, setProfilPict] = useState<string>("");
   const [profileImage, setProfileImage] = useState<string>("");
   const [groupIcon, setGroupIcon] = useState("");
+  const [showCamera, setShowCamera] = useState<boolean>(false);
+  const [opendocs, setOpendocs] = useState();
 
   const [sendingFile, setSendingFile] = useState<any>();
   const [start, setStart] = useState<boolean>(false);
@@ -108,6 +118,10 @@ export const WhatSappContextProvider = ({ children }: any) => {
     setAddedGroup,
     groupIcon,
     setGroupIcon,
+    showCamera,
+    setShowCamera,
+    opendocs,
+    setOpendocs,
   };
 
   if (importPict) console.log("importPict: ", importPict);
@@ -146,6 +160,10 @@ export const useWhatSappContext = () => {
     setIsDark,
     label,
     setLabel,
+    showCamera,
+    setShowCamera,
+    opendocs,
+    setOpendocs,
   } = useContext(WhatSappContext);
   return {
     openSideNav,
@@ -172,5 +190,9 @@ export const useWhatSappContext = () => {
     setIsDark,
     label,
     setLabel,
+    showCamera,
+    setShowCamera,
+    opendocs,
+    setOpendocs,
   };
 };

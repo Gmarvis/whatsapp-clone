@@ -13,6 +13,7 @@ import { Message, User } from "@/type";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import EmojiMessage from "./EmojiMessage";
 import { supabase } from "@/utils/supabase/client";
+import { IoMdClose } from "react-icons/io";
 
 type Props = {
   messageList: any[];
@@ -143,6 +144,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
               size={25}
             />
           </span>
+
           {props.isGroupdiscussion ? (
             <SenderMessages
               content={sortMessageList[0].content}
@@ -217,7 +219,6 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
               <FaFaceGrinWide className=" text-white" size={20} />
             </span>
           </div>
-
           {props.showMessageEmoji && messages.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
@@ -281,7 +282,6 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
               />
             )}
           </div>
-
           <div className=" w-full flex justify-end items-center">
             {messages.emoji ? (
               <span className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out translate-y-[-10px] translate-x-[-20px]">
@@ -295,6 +295,19 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
       );
     }
   });
+
+  // if() {
+  //   return(
+  //     <>
+  //       <div className="max-w-full flex flex-col">
+  //         <IoMdClose />
+  //            <div>
+  //             <Image src={} alt=""/>
+  //            </div>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   return (
     <div className=" max-w-full flex flex-col ">

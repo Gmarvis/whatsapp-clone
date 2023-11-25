@@ -43,13 +43,14 @@ import getAllGroupsPerUser from "@/utils/queries/getAllGroups";
 // import fetchUserGoups from "@/utils/queries/fetchAllUserGroups";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { useRouter } from "next/navigation";
-
+import WebcamCapture from "@/components/filesUpload/webcamCapture";
+import DocumentsUpload from "@/components/filesUpload/documentsUpload";
 // import { useWhatSappContext } from "@/components/context";
 
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
 
-  const email: string = (localStorage.getItem("email") as string);
+  const email: string = JSON.parse(localStorage.getItem("email") as string);
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User>(() =>
     JSON.parse(localStorage.getItem("sender") || "{}")
@@ -98,6 +99,8 @@ const Discossions = () => {
   } = useWhatSappContext();
   const { openContactInfo, setOpenContactInfo } = useWhatSappContactContext();
   const { openProfile, setOpenProfile } = useProfileContext();
+  const { showCamera } = useWhatSappContext();
+  const { opendocs } = useWhatSappContext();
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
@@ -124,9 +127,9 @@ const Discossions = () => {
   };
 
   useEffect(() => {
-    fetchSignupUser(currentUser?.email as string)
+    fetchSignupUser(email as string)
       .then((data) => {
-        console.log(data)
+        console.log(data);
         // setCurrentUser(data);
       })
       .catch((err) => {
@@ -151,7 +154,7 @@ const Discossions = () => {
       ref.current.addEventListener("click", handleClickOutSide);
     return () => document.removeEventListener("click", handleClickOutSide);
   }, [addedGroup]);
-  console.log('this is currentUser', currentUser)
+  console.log("this is currentUser", currentUser);
 
   // this is useEffect is mainly to let user setup their profile after the have signup
   // useEffect(() => {
@@ -347,14 +350,16 @@ const Discossions = () => {
               ref={ref}
               className={
                 openSideNav || openContactInfo
-                  ? `relative w-[50vw] ${!start
-                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                    : "bg-whatsappimg pb-10"
-                  }  border-r border-r-gray-300 z-0`
-                  : `relative w-[75vw] bg-whatsappdashimg z-0 pb-10 ${!start
-                    ? "bg-whatsappdashimg bg-no-repeat bg-cover"
-                    : "bg-whatsappimg"
-                  }`
+                  ? `relative w-[50vw] ${
+                      !start
+                        ? "bg-whatsappdashimg bg-no-repeat bg-cover"
+                        : "bg-whatsappimg pb-10"
+                    }  border-r border-r-gray-300 z-0`
+                  : `relative w-[75vw] bg-whatsappdashimg z-0 pb-10 ${
+                      !start
+                        ? "bg-whatsappdashimg bg-no-repeat bg-cover"
+                        : "bg-whatsappimg"
+                    }`
               }
             >
               <div
@@ -407,7 +412,6 @@ const Discossions = () => {
                   )}
                 </div>
               </div>
-
               <div className=" w-full flex flex-col mt-3 px-10 h-[80vh] overflow-y-auto ">
                 {discussionsMessages.length ? (
                   <Messages
@@ -424,6 +428,8 @@ const Discossions = () => {
                 ) : (
                   ""
                 )}
+                {showCamera && <WebcamCapture />}
+                {opendocs && <DocumentsUpload />}
               </div>
 
               <div
@@ -431,8 +437,8 @@ const Discossions = () => {
                   !start
                     ? "hidden"
                     : openSideNav || openContactInfo
-                      ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
-                      : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                    ? "  w-[50vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
+                    : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
                 }
               >
                 {showDropdrownBottonL && <DropDownR ref={dropdownRef} />}
@@ -457,7 +463,6 @@ const Discossions = () => {
                     }
                   />
                 </button>
-
                 <div className="flex bg-white items-center rounded-md gap-5 p-1 w-full">
                   <input
                     type="text"
@@ -495,8 +500,9 @@ const Discossions = () => {
           {!profilepict ||
             (!currentUser?.image && (
               <div
-                className={`bg-themecolor ${openProfile ? "hidden" : "visible"
-                  } flex justify-between items-center fixed w-full p-5`}
+                className={`bg-themecolor ${
+                  openProfile ? "hidden" : "visible"
+                } flex justify-between items-center fixed w-full p-5`}
               >
                 <p>Welcome to WhatsApp Clone..!</p>
                 <button

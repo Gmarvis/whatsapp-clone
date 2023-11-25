@@ -25,12 +25,18 @@ const WebcamCapture = () => {
           facingMode: "user",
         }}
       />
-      <button onClick={capture}>Camera</button>
+      <button
+        className="bg-teal-600 py-3 px-6 rounded mt-4 text-white text-[17px] w-[100px]"
+        onClick={capture}
+      >
+        Camera
+      </button>
 
       {capturedImage && (
         <Image
           src={capturedImage}
           alt="Captured Image"
+          className="py-2 center"
           layout="fixed"
           width={200}
           height={200}

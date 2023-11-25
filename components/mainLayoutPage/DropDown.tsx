@@ -90,8 +90,6 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
     if (uldd !== null) {
       uldd.style.display = "none";
     }
-
-    
   };
 
   const handleOnclose = () => SetDisconPopup(false);
