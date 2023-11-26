@@ -14,6 +14,7 @@ type WhatSappContextType = {
   showPPicture: boolean;
   showCamera: boolean;
   opendocs: any;
+  openImage: any;
   openCreateGroup: boolean;
   importPict: boolean;
   profilepict: string;
@@ -25,6 +26,7 @@ type WhatSappContextType = {
   label: string;
   setShowCamera: Dispatch<SetStateAction<boolean>>;
   setOpendocs: Dispatch<SetStateAction<any>>;
+  setOpenImage: Dispatch<SetStateAction<any>>;
   setLabel: Dispatch<SetStateAction<string>>;
   setIsDark: Dispatch<SetStateAction<boolean>>;
   setAddedGroup: Dispatch<SetStateAction<boolean>>;
@@ -70,6 +72,8 @@ const initContextState: WhatSappContextType = {
   setShowCamera: (showCamera) => !showCamera,
   opendocs: "",
   setOpendocs: (opendocs) => !opendocs,
+  openImage: "",
+  setOpenImage: (openImage) => !openImage,
 };
 
 export const WhatSappContext =
@@ -86,6 +90,7 @@ export const WhatSappContextProvider = ({ children }: any) => {
   const [groupIcon, setGroupIcon] = useState("");
   const [showCamera, setShowCamera] = useState<boolean>(false);
   const [opendocs, setOpendocs] = useState();
+  const [openImage, setOpenImage] = useState();
 
   const [sendingFile, setSendingFile] = useState<any>();
   const [start, setStart] = useState<boolean>(false);
@@ -122,6 +127,8 @@ export const WhatSappContextProvider = ({ children }: any) => {
     setShowCamera,
     opendocs,
     setOpendocs,
+    openImage,
+    setOpenImage,
   };
 
   if (importPict) console.log("importPict: ", importPict);
@@ -164,6 +171,8 @@ export const useWhatSappContext = () => {
     setShowCamera,
     opendocs,
     setOpendocs,
+    openImage,
+    setOpenImage,
   } = useContext(WhatSappContext);
   return {
     openSideNav,
@@ -194,5 +203,7 @@ export const useWhatSappContext = () => {
     setShowCamera,
     opendocs,
     setOpendocs,
+    openImage,
+    setOpenImage,
   };
 };

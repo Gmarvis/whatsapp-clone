@@ -45,6 +45,7 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { useRouter } from "next/navigation";
 import WebcamCapture from "@/components/filesUpload/webcamCapture";
 import DocumentsUpload from "@/components/filesUpload/documentsUpload";
+import Imageupload from "@/components/filesUpload/imageupload";
 // import { useWhatSappContext } from "@/components/context";
 
 const Discossions = () => {
@@ -101,6 +102,7 @@ const Discossions = () => {
   const { openProfile, setOpenProfile } = useProfileContext();
   const { showCamera } = useWhatSappContext();
   const { opendocs } = useWhatSappContext();
+  const { openImage } = useWhatSappContext();
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
@@ -430,6 +432,7 @@ const Discossions = () => {
                 )}
                 {showCamera && <WebcamCapture />}
                 {opendocs && <DocumentsUpload />}
+                {openImage && <Imageupload />}
               </div>
 
               <div

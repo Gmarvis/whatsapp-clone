@@ -1,12 +1,13 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { useWhatSappContext } from "../context";
 import { IoMdClose } from "react-icons/io";
 
-const DocumentsUpload = () => {
-  const { opendocs, setOpendocs } = useWhatSappContext();
+const Imageupload = () => {
+  const { openImage, setOpenImage } = useWhatSappContext();
 
   const handleClose = () => {
-    setOpendocs(null);
+    setOpenImage(null);
   };
 
   return (
@@ -17,9 +18,9 @@ const DocumentsUpload = () => {
           className="w-[30px] h-[30px] bg-gray-500 font-bold text-white rounded"
         />
       </div>
-      <p>{opendocs && opendocs.name}</p>
+      <p className="flex inset-0 items-center">{openImage && openImage.size}</p>
     </div>
   );
 };
 
-export default DocumentsUpload;
+export default Imageupload;

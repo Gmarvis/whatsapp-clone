@@ -19,12 +19,18 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
   const hiddenFileInputRef = useRef();
   const { setShowCamera } = useWhatSappContext();
   const { opendocs, setOpendocs } = useWhatSappContext();
+  const { openImage, setOpenImage } = useWhatSappContext();
 
   const handleFileChange = (event: ChangeEvent<HTMLElement>) => {
     const file = event.target.files[0];
 
     setOpendocs(file);
     // console.log(typeof opendocs);
+  };
+
+  const handleImageupload = (event: ChangeEvent<HTMLElement>) => {
+    const file = event.target.files[0];
+    setOpenImage(file);
   };
 
   const handleOpenFilePicker = () => {
@@ -69,18 +75,20 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
           type="file"
           id="fileInput"
           ref={hiddenFileInputRef}
-          // style={{ display: "none" }}
+          style={{ display: "none" }}
+          accept="docs, pdf, word"
           onChange={handleFileChange}
         />
         <TbFileDescription
           size={23}
           className=" bg-[#edecee] text-[#8544bd] w-6"
         />
-        {/* <span className="ml-2" onClick={handleOpenFilePicker}>
+        <span className="ml-2" onClick={handleOpenFilePicker}>
           Document
-        </span> */}
+        </span>
       </li>
       <li
+        onClick={() => setOpenImage((prev: any) => !prev)}
         id="photo"
         className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center"
       >
@@ -89,6 +97,8 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
           id="fileInput"
           ref={hiddenFileInputRef}
           style={{ display: "none" }}
+          accept="image/jpeg, video/mp4, video/avi, image/png, image/gif"
+          onChange={handleImageupload}
         />
         <MdPhotoLibrary size={25} className=" bg-white text-[#2250cf]" />
         <span className="ml-2" onClick={handleOpenFilePicker}>
@@ -102,22 +112,6 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
       >
         <AiFillCamera size={25} className=" bg- text-[#ff2a58] " />
         <span className="ml-2">Camera</span>
-      </li>
-      <li className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center">
-        <FaUserLarge size={22} className=" bg-white text-[#4a64cb] " />{" "}
-        <span className="ml-2">Contact</span>
-      </li>
-      <li className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center">
-        <FontAwesomeIcon
-          icon={faSquarePollHorizontal}
-          style={{ width: 23, height: 23 }}
-          className=" text-[#ff8c00]"
-        />
-        <span className="ml-2">Survey</span>
-      </li>
-      <li className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center">
-        <WiStars size={23} className=" bg-[#20c997] text-white rounded-md" />{" "}
-        <span className="ml-2">New sticker</span>
       </li>
     </ul>
   );

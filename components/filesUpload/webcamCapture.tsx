@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import Image from "next/image";
+import { IoMdClose } from "react-icons/io";
 
 const WebcamCapture = () => {
   const webcamRef = useRef(null);
@@ -11,8 +12,18 @@ const WebcamCapture = () => {
     setCapturedImage(imageSrc);
   };
 
+  const handleClose = () => {
+    setCapturedImage(null);
+  };
+
   return (
     <>
+      <div className="bg-gray-100 py-4 px-4">
+        <IoMdClose
+          onClick={handleClose}
+          className="w-[30px] h-[30px] bg-gray-500 font-bold text-white rounded"
+        />
+      </div>
       <Webcam
         audio={false}
         height={720}
@@ -29,7 +40,7 @@ const WebcamCapture = () => {
         className="bg-teal-600 py-3 px-6 rounded mt-4 text-white text-[17px] w-[100px]"
         onClick={capture}
       >
-        Camera
+        Capture
       </button>
 
       {capturedImage && (
