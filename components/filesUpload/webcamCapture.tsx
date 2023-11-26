@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import Image from "next/image";
 import { IoMdClose } from "react-icons/io";
+import { useWhatSappContext } from "../context";
 
 const WebcamCapture = () => {
   const webcamRef = useRef(null);
@@ -12,8 +13,10 @@ const WebcamCapture = () => {
     setCapturedImage(imageSrc);
   };
 
+  const { setShowCamera } = useWhatSappContext();
+
   const handleClose = () => {
-    setCapturedImage(null);
+    setShowCamera(false);
   };
 
   return (

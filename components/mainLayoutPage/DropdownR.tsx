@@ -10,57 +10,80 @@ import { faSquarePollHorizontal } from "@fortawesome/free-solid-svg-icons";
 import { WiStars } from "react-icons/wi";
 import { supabase } from "@/utils/supabase/client";
 import { useWhatSappContext } from "../context";
+import { fileURLToPath } from "url";
 
 export interface IAppProps {}
 
 const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
   console.log("in the drop d");
   // const [selectedFile, setSelectedFile] = useState(null);
-  const hiddenFileInputRef = useRef();
+  const hiddenFileInputRef = useRef()!;
   const { setShowCamera } = useWhatSappContext();
   const { opendocs, setOpendocs } = useWhatSappContext();
   const { openImage, setOpenImage } = useWhatSappContext();
 
-  const handleFileChange = (event: ChangeEvent<HTMLElement>) => {
+  const handleFileChange = (event: any) => {
     const file = event.target.files[0];
-
-    setOpendocs(file);
+    const fileURL = URL.createObjectURL(file);
+    setOpendocs(fileURL);
     // console.log(typeof opendocs);
   };
 
-  const handleImageupload = (event: ChangeEvent<HTMLElement>) => {
+  const handleImageupload = (event: any) => {
     const file = event.target.files[0];
-    setOpenImage(file);
+    const fileURL = URL.createObjectURL(file);
+    setOpenImage(fileURL);
   };
 
   const handleOpenFilePicker = () => {
+    // if (hiddenFileInputRef && hiddenFileInputRef.current)
     hiddenFileInputRef.current.click();
+
+    // const inputFile = document.createElement("input") as HTMLInputElement;
+    // inputFile.type = "file";
+    // inputFile.accept = "docs, pdf, word";
+    // inputFile.addEventListener("change", (e: any) => {
+    //   const file = e.target.files[0];
+    //   const fileUrl = URL.createObjectURL(file);
+    //   setOpendocs(fileUrl);
+    //   const reader = new FileReader();
+    //   reader.addEventListener("load", (e: any) => {
+    //     const fileContent = reader.result;
+    //     if (fileContent) {
+    //       setOpenImage(fileContent as string);
+    //       setOpendocs(fileContent as string);
+    //     }
+    //   });
+    //   reader.readAsBinaryString(file);
+    // });
+
+    // inputFile.click();
   };
 
-  const handleUploadFile = async () => {
-    if (!selectedFile) {
-      return;
-    }
+  // const handleUploadFile = async () => {
+  //   if (!selectedFile) {
+  //     return;
+  //   }
 
-    const storage = supabase.storage;
+  //   const storage = supabase.storage;
 
-    const fileName = selectedFile.name;
-    const fileData = await selectedFile.arrayBuffer();
+  //   const fileName = selectedFile.name;
+  //   const fileData = await selectedFile.arrayBuffer();
 
-    const { error } = await storage.from("uploads").upload(fileName, fileData, {
-      cacheControl: "3600",
-      contentType: selectedFile.type,
-    });
+  //   const { error } = await storage.from("uploads").upload(fileName, fileData, {
+  //     cacheControl: "3600",
+  //     contentType: selectedFile.type,
+  //   });
 
-    if (error) {
-      console.error("Failed to upload file:", error);
-      return;
-    }
+  //   if (error) {
+  //     console.error("Failed to upload file:", error);
+  //     return;
+  //   }
 
-    // Send file URL to another user using any appropriate method
-    const fileURL = await storage.from("uploads").getPublicUrl(fileName);
-    console.log("File uploaded:", fileURL);
-  };
+  //   // Send file URL to another user using any appropriate method
+  //   const fileURL = await storage.from("uploads").getPublicUrl(fileName);
+  //   console.log("File uploaded:", fileURL);
+  // };
 
   return (
     <ul

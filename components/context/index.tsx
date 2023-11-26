@@ -90,7 +90,7 @@ export const WhatSappContextProvider = ({ children }: any) => {
   const [groupIcon, setGroupIcon] = useState("");
   const [showCamera, setShowCamera] = useState<boolean>(false);
   const [opendocs, setOpendocs] = useState();
-  const [openImage, setOpenImage] = useState();
+  const [openImage, setOpenImage] = useState("");
 
   const [sendingFile, setSendingFile] = useState<any>();
   const [start, setStart] = useState<boolean>(false);
