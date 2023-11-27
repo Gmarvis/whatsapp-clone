@@ -12,6 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 type Props = {
   currentUser: User;
   receiver: User;
+  publicUrl: string;
 };
 
 const Imageupload = ({ currentUser, receiver }: Props) => {
@@ -59,7 +60,7 @@ const Imageupload = ({ currentUser, receiver }: Props) => {
     if (error) console.log("error inserting messages: ", error);
     setMessage("");
   };
-  console.log(message);
+  // console.log(message);
 
   const handlekeydown = async (event: any) => {
     if (event.key === "Enter") await sendMessageToDB();

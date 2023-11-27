@@ -85,6 +85,8 @@ const Discossions = () => {
   const router = useRouter();
   const [imageUrl, setImageUrl] = useState("");
 
+  const [docsopen, setDocsopen] = useState("");
+
   // if (!email && !currentUser) router.push("/");
 
   const {
@@ -443,12 +445,14 @@ const Discossions = () => {
                   <DocumentsUpload
                     currentUser={currentUser}
                     receiver={receiver as User}
+                    publicUrl={docsopen}
                   />
                 )}
                 {openImage && (
                   <Imageupload
                     currentUser={currentUser}
                     receiver={receiver as User}
+                    publicUrl={docsopen}
                   />
                 )}
               </div>
@@ -462,7 +466,9 @@ const Discossions = () => {
                     : "w-[75vw] flex items-center bg-bgGray h-[] fixed bottom-0 py-2 px-5 gap-5 z-0"
                 }
               >
-                {showDropdrownBottonL && <DropDownR ref={dropdownRef} />}
+                {showDropdrownBottonL && (
+                  <DropDownR ref={dropdownRef} setDocsopen={setDocsopen} />
+                )}
                 <BsEmojiSmile className="text-2xl text-gray-700" />
                 <button
                   type="button"

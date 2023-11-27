@@ -1,5 +1,5 @@
 "use client";
-import React, { forwardRef } from "react";
+import React, { SetStateAction, forwardRef } from "react";
 import { useRef } from "react";
 import { TbFileDescription } from "react-icons/tb";
 import { MdPhotoLibrary } from "react-icons/md";
@@ -7,12 +7,16 @@ import { AiFillCamera } from "react-icons/ai";
 import { supabase } from "@/utils/supabase/client";
 import { useWhatSappContext } from "../context";
 
-export interface IAppProps {}
+export interface IAppProps {
+  setDocsopen: React.Dispatch<SetStateAction<string>>;
+  RefObject: string;
+}
 
-const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
+const DropDownR = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
   console.log("in the drop d");
   // const [selectedFile, setSelectedFile] = useState(null);
-  const hiddenFileInputRef = useRef()!;
+  // const hiddenFileInputRef = useRef()!;
+  const hiddenFileInputRef = React.useRef<HTMLInputElement>(null);
   const { setShowCamera } = useWhatSappContext();
   const { opendocs, setOpendocs } = useWhatSappContext();
   const { openImage, setOpenImage } = useWhatSappContext();
@@ -33,6 +37,7 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
       console.log("image added data", data);
       const imageUrl = supabase.storage.from(bucket).getPublicUrl(data.path);
       console.log("send image url", imageUrl.data.publicUrl);
+      props.setDocsopen(imageUrl.data.publicUrl as string);
       return imageUrl.data.publicUrl;
     }
   };
@@ -46,13 +51,17 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
 
     const { data, error } = await supabase.storage
       .from(bucket)
-      .upload(fileURL, file);
+      .upload(fileURL, file, {
+        cacheControl: "3600",
+        contentType: file.type,
+      });
 
     if (error) {
       console.error("error adding docs", error);
     } else {
-      console.log("image added data", data);
+      console.log("image uploaded successfully", data);
       const imageUrl = supabase.storage.from(bucket).getPublicUrl(data.path);
+      props.setDocsopen(imageUrl.data.publicUrl as string);
       console.log("send image url", imageUrl.data.publicUrl);
       return imageUrl.data.publicUrl;
     }

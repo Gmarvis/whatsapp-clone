@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 type Props = {
   currentUser: User;
   receiver: User;
+  publicUrl: string;
 };
 
-const DocumentsUpload = ({ currentUser, receiver }: Props) => {
+const DocumentsUpload = ({ currentUser, receiver, publicUrl }: Props) => {
   if (typeof localStorage === "undefined") return;
 
   const { opendocs, setOpendocs } = useWhatSappContext();
@@ -43,7 +44,7 @@ const DocumentsUpload = ({ currentUser, receiver }: Props) => {
     const sendingMessage: Message = {
       sender_id: currentUser.id as string,
       receiver_room_id: receiver?.id as string,
-      content: message,
+      content: publicUrl,
       sender_name: currentUser?.name,
       phone_number: currentUser?.phone as string,
     };
