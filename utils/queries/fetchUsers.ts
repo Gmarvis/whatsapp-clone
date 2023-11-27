@@ -58,9 +58,7 @@ const fetchUsers = async (currentUserId: string) => {
   );
 
   return {
-    merged: listToReturn?.sort(
-      (user1: any, user2: any) => user1.unread_count - user2.unread_count
-    ),
+    merged: listToReturn,
     data: data,
     groups: groups.flat().map((group) => group.id),
     currentUserRoomId,

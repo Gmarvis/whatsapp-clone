@@ -69,6 +69,7 @@ const Discossions = () => {
   const [showDropdrownBottonL, setShowDropdrownBottonL] =
     useState<boolean>(false);
   const [insert, setInsert] = useState<boolean>(false);
+  const [insert, setInsert] = useState<boolean>(false);
   const [discussionsMessages, setDiscussionsMessages] = useState<Message[]>([]);
   const [showMessageEmoji, setMessageEmoji] = useState<boolean>(false);
   const [lastMessage, setLastMessage] = useState<Message>();
@@ -231,18 +232,19 @@ let i = 0;
       async (payload: any) => {
         console.log("Change received!", payload);
         setLastMessage(payload.new);
-
         updateUnreadMessageCount(
           payload.new.sender_id,
           payload.new.receiver_room_id,
+          insert,
           payload.new.content
         )
           .then((data) => {
-            if (data) console.log("update unread message count", data);
+            if (data?.data) console.log("update unread message count", data);
           })
           .catch((err) => console.log(err));
 
         if (payload.eventType === "UPDATE") {
+          setInsert(false);
           const newIndex: number = discussionsMessages?.findIndex(
             (message: any) => message.id === payload.new.id
           );
@@ -252,16 +254,7 @@ let i = 0;
         }
 
         if (payload.eventType === "INSERT") {
-          updateUnreadMessageCount(
-            payload.new.sender_id,
-            payload.new.receiver_room_id,
-            false,
-            payload.new.content
-          )
-            .then((data) => {
-              if (data?.data) console.log("update unread message count", data);
-            })
-            .catch((err) => console.log(err));
+          setInsert(true);
           if (userGroupsId?.includes(payload.new.receiver_room_id)) {
             groupMembersIds?.map((_) => {
               supabase
@@ -288,17 +281,10 @@ let i = 0;
               ...prev,
               { ...payload.new, receiver_room_id: currentUserRoomId },
             ]);
-          } else setDiscussionsMessages((prev) => [...prev, payload.new]);
-
-        updateUnreadMessageCount(
-          payload.new.sender_id,
-          payload.new.receiver_room_id,
-          payload.new.content
-        )
-          .then((data) => {
-            if (data) console.log("update unread message count", data);
-          })
-          .catch((err) => console.log(err));
+          } else {
+            setDiscussionsMessages((prev) => [...prev, payload.new]);
+          }
+        }
       }
     )
     .subscribe();
@@ -394,7 +380,10 @@ let i = 0;
                 </div>
               </div>
               <DirectMessage
-                users={users}
+                users={users?.sort(
+                  (user1: any, user2: any) =>
+                    user2.unread_count - user1.unread_count
+                )}
                 setReceiver={setReceiver}
                 className=" overflow-y-auto h-full p-0"
                 setRoomObject={setRoomObject}

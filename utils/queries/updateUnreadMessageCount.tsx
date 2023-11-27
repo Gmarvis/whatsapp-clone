@@ -5,7 +5,6 @@ export const updateUnreadMessageCount = async (
   sender_id: string,
   receiver_room_id: string,
   content?: string
-  content?: string
 ) => {
   let guardContent: string = "",
     senderid = "",
@@ -25,17 +24,17 @@ export const updateUnreadMessageCount = async (
     .select("*")
     .match({ sender_id: sender_id, receiver_room_id: receiver_room_id })
     .single();
-
-  if (data && data.last_message === content) {
+  console.log(data.last_message === content);
+  if (data && data.last_message === content && !is_update) {
     console.log("encore du test not accepted");
     return;
   } else {
-    console.log("encore du test mais accepted");
+    console.log("encore du test mais accepted , content: " + content);
     unreadMessages = await supabase.from("unread_messages").upsert(
       {
         sender_id: sender_id,
         receiver_room_id: receiver_room_id,
-        unread_count: last_unread_count + 1,
+        unread_count: data.unread_count + 1,
         last_message: content,
       },
       {
@@ -49,6 +48,7 @@ export const updateUnreadMessageCount = async (
     receiver_id = receiver_room_id;
     last_unread_count =
       data === null ? data?.unread_count + 1 : data?.unread_count;
+    console.log("unread count: ", last_unread_count);
   }
 
   return unreadMessages;
