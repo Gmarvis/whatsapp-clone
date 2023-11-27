@@ -17,28 +17,50 @@ const Signupb = () => {
     const googleUser = JSON.parse(
       localStorage.getItem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}"
     );
-    const { data } = await supabase.from("user").select("email");
-    let res = data?.filter((i) => i.email === googleUser.user.email);
-    if (res?.length === 1) {
-      LOCAL_STORAGE.save("email", googleUser.user.email);
-      setSuccess("Welcome back 🙂");
-      router.push("/discussions");
-      setIsLoading(false);
-      return;
-    }
-    if (res?.length === 0) {
-      LOCAL_STORAGE.save("email", googleUser.user.email);
-      const { data, error } = await supabase.from("user").insert({
+
+    localStorage.setItem("email", googleUser.user.email);
+
+    const { data, error } = await supabase
+      .from("user")
+      .insert({
         email: googleUser.user.email,
         name: googleUser.user.user_metadata.name,
         image: googleUser.user.user_metadata.picture,
         phone: googleUser.user.identities.phone,
       });
-      if (error) console.log("an error occured while sending user", error);
-      console.log("data from DB", data);
-      router.push("/discussions");
-      setIsLoading(false);
-    }
+
+    if (error) console.log("an error occured while sending user", error);
+
+    console.log("data from DB", data);
+
+    router.push("/discussions");
+
+    // const email = localStorage.getItem("email");
+    // const random = one + two + three + four + five + six;
+    // let code = JSON.stringify(params.signup);
+    // let sentCode = code.slice(10, 16);
+
+    // if (random == sentCode) {
+    //   const { data, error } = await supabase
+    //     .from("user")
+    //     .insert({ email: email });
+
+    //   console.log(data);
+
+    //   if (error) {
+    //     console.log(error);
+    //     setError("Email address already exist");
+    //     setIsloading(false);
+    //     return;
+    //   }
+    //   //  if (data) console.log(data);
+    //   router.push("/discussions");
+    // } else {
+    //   setError("Invalid code");
+    //   console.log("invalid");
+    //   setIsloading(false);
+    //   return;
+    // }
   };
 
   return (
@@ -53,7 +75,7 @@ const Signupb = () => {
       </h4>
       <button
         onClick={() => handleInputChange()}
-        className="border p-4 px-5 text-base font-extrabold text-black rounded"
+        className="border p-3 bg-red-300"
       >
         {isLoading ? <Pulsation /> : "Agree and Continue"}
       </button>
