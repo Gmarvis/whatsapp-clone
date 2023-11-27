@@ -397,7 +397,7 @@ let i = 0;
                     user2.unread_count - user1.unread_count
                 )}
                 setReceiver={setReceiver}
-                className=" overflow-y-auto h-fit bg-blue-500"
+                className=" overflow-y-auto h-fit"
                 setRoomObject={setRoomObject}
                 setUsers={setUsers}
                 setRecipient={setRecipient}
