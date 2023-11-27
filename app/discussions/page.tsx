@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../components/Avatar";
 import { MdGroups2 } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
@@ -38,6 +37,13 @@ import CreateGrt from "@/components/profilPage/CreateGrt";
 import CreateGroup from "@/components/createGroup/CreateGroup";
 import { getGroupMembers } from "@/utils/queries/getGroupMembers";
 import DOMPurify from "isomorphic-dompurify";
+import fetchGroupsOfSingleUser from "@/utils/queries/fetchGroupsOfSingleUser";
+import getAllGroupsPerUser from "@/utils/queries/getAllGroups";
+// import fetchUserGoups from "@/utils/queries/fetchAllUserGroups";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 import { updateUnreadMessageCount } from "@/utils/queries/updateUnreadMessageCount";
 
@@ -46,7 +52,6 @@ const Discossions = () => {
 
   const email: string = JSON.parse(localStorage.getItem("email") as string);
   const [users, setUsers] = useState<User[]>([]);
-  // state containing the user info
   // state containing the user info
   const [currentUser, setCurrentUser] = useState<User>(() =>
     JSON.parse(localStorage.getItem("sender") || "{}")
@@ -69,10 +74,8 @@ const Discossions = () => {
   const [showDropdrownBottonL, setShowDropdrownBottonL] =
     useState<boolean>(false);
   const [insert, setInsert] = useState<boolean>(false);
-  const [insert, setInsert] = useState<boolean>(false);
   const [discussionsMessages, setDiscussionsMessages] = useState<Message[]>([]);
   const [showMessageEmoji, setMessageEmoji] = useState<boolean>(false);
-  const [lastMessage, setLastMessage] = useState<Message>();
   const [lastMessage, setLastMessage] = useState<Message>();
 
   const { showCreateGroup } = useProfileContext();
@@ -199,7 +202,8 @@ const Discossions = () => {
   }, [receiver?.id]);
 
   const sendMessageToDB = async () => {
-    if (!message || !receiver?.id) {
+    if (message === "" || !receiver?.id) {
+      toast.warning('Field cannot be empty', { autoClose: 1000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
       console.log("message or receiver of the message can not be empty");
       return;
     }
@@ -229,22 +233,21 @@ let i = 0;
       "postgres_changes",
       { event: "*", schema: "public", table: "messages" },
       async (payload: any) => {
-      async (payload: any) => {
         console.log("Change received!", payload);
         setLastMessage(payload.new);
-        updateUnreadMessageCount(
-          payload.new.sender_id,
-          payload.new.receiver_room_id,
-          insert,
-          payload.new.content
-        )
-          .then((data) => {
-            if (data?.data) console.log("update unread message count", data);
-          })
-          .catch((err) => console.log(err));
+     
 
         if (payload.eventType === "UPDATE") {
-          setInsert(false);
+          updateUnreadMessageCount(
+            payload.new.sender_id,
+            payload.new.receiver_room_id,
+            true,
+            payload.new.content
+          )
+            .then((data) => {
+              if (data?.data) console.log("update unread message count", data);
+            })
+            .catch((err) => console.log(err));
           const newIndex: number = discussionsMessages?.findIndex(
             (message: any) => message.id === payload.new.id
           );
@@ -254,7 +257,16 @@ let i = 0;
         }
 
         if (payload.eventType === "INSERT") {
-          setInsert(true);
+          updateUnreadMessageCount(
+            payload.new.sender_id,
+            payload.new.receiver_room_id,
+            false,
+            payload.new.content
+          )
+            .then((data) => {
+              if (data?.data) console.log("update unread message count", data);
+            })
+            .catch((err) => console.log(err));
           if (userGroupsId?.includes(payload.new.receiver_room_id)) {
             groupMembersIds?.map((_) => {
               supabase
@@ -288,7 +300,7 @@ let i = 0;
       }
     )
     .subscribe();
-
+    
   const unreadMessages = supabase
     .channel("custom-insert-channel")
     .on(
@@ -298,8 +310,7 @@ let i = 0;
         console.log("Change received from unread_message table!", payload);
 
         const index = users?.findIndex(
-          (user: User) =>
-            user.user_id === payload.new.sender_id 
+          (user: User) => user.user_id === payload.new.sender_id
         );
         if (
           index !== -1 &&
@@ -342,8 +353,7 @@ let i = 0;
         <>
           <UploadPicture />
           <div className={importPict ? "hidden" : "flex w-full "}>
-            
-            <div className="bg-white w-[25vw] h-screen">
+            <div className="bg-white w-[25vw] h-[10%]">
               <ProfilePage title="Profil">
                 <ProfilePageContent />
               </ProfilePage>
@@ -386,7 +396,7 @@ let i = 0;
                     user2.unread_count - user1.unread_count
                 )}
                 setReceiver={setReceiver}
-                className=" overflow-y-auto h-fit"
+                className=" overflow-y-auto h-full p-0"
                 setRoomObject={setRoomObject}
                 setUsers={setUsers}
                 setRecipient={setRecipient}
@@ -394,8 +404,6 @@ let i = 0;
                 currentUserRoomId={currentUserRoomId as string}
               />
             </div>
-
-
             <div
               ref={ref}
               className={
