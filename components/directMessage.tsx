@@ -75,36 +75,7 @@ const DirectMessage = ({
 
   let lastRecievedMessage = "";
 
-  const unreadMessages = supabase
-    .channel("custom-insert-channel")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "unread_messages" },
-      async (payload: any) => {
-        console.log("Change received from unread_message table!", payload);
 
-        // const ndex = users?.findIndex(
-        //   (user: User) => user.user_id === payload.new.sender_id
-        // );
-        // if (ndex !== -1) users = swap(users, 0, ndex);
-
-        const index = users?.findIndex(
-          (user: User) =>
-            user.user_id === payload.new.sender_id &&
-            payload.new.receiver_room_id === currentUserRoomId
-        );
-        if (index !== -1) {
-          console.log("trying to swap", payload);
-          users[index] = {
-            ...users[index],
-            unread_count: payload.new.unread_count,
-          };
-          users[0] = users.splice(index, 1, users[0])[0];
-          setUsers(users);
-        }
-      }
-    )
-    .subscribe();
   return (
     <div className={` ${openProfile ? "hidden" : className} `}>
       {users.length ? (

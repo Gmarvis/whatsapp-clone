@@ -32,26 +32,28 @@ const fetchUsers = async (currentUserId: string) => {
     .filter(Boolean);
   // console.log("filtered users", usersInRoomTable.flat().filter(Boolean));
 
-  // const listOfunreadMessagesCount = (
-  //   await supabase.from("unread_messages").select("*")
-  // ).data;
+  const listOfunreadMessagesCount = (
+    await supabase.from("unread_messages").select("*")
+  ).data;
 
-  // const listToReturn = listOfunreadMessagesCount?.reduce(
-  //   (acc, curr) => {
-  //     const index = acc?.findIndex(
-  //       (item: User) =>
-  //         item.user_id === curr.sender_id &&
-  //         curr.receiver_room_id === currentUserRoomId
-  //     );
-  //     if (index !== -1)
-  //       acc[index] = { ...acc[index], unread_count: curr.unread_count };
-  //     return acc;
-  //   },
-  //   [...usersInRoomTable]
-  // );
+  const listToReturn = listOfunreadMessagesCount?.reduce(
+    (acc, curr) => {
+      const index = acc?.findIndex(
+        (item: User) =>
+          item.user_id === curr.sender_id
+      );
+      if (index !== -1  &&
+        curr.receiver_room_id === currentUserRoomId) {
+          acc[index] = { ...acc[index], unread_count: curr.unread_count, last_message: curr.last_message };
+        }
+       
+      return acc;
+    },
+    [...usersInRoomTable]
+  );
 
   return {
-    merged: usersInRoomTable,
+    merged: listToReturn,
     data: data,
     groups: groups.flat().map((group) => group.id),
     currentUserRoomId,

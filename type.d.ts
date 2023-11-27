@@ -27,6 +27,7 @@ type User = {
   updated_at?: string;
   user_id?: string;
   unread_count?: number;
+  last_message?: string;
 };
 
 type Message = {

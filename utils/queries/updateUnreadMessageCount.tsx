@@ -4,7 +4,7 @@ import { supabase } from "../supabase/client";
 export const updateUnreadMessageCount = async (
   sender_id: string,
   receiver_room_id: string,
-  value?: number
+  content?: string
 ) => {
   const { data, error } = await supabase
     .from("unread_messages")
@@ -19,7 +19,8 @@ export const updateUnreadMessageCount = async (
       {
         sender_id: sender_id,
         receiver_room_id: receiver_room_id,
-        unread_count: value === 0 ? value : dbvalue,
+        unread_count: dbvalue,
+        last_message: content,
       },
       {
         onConflict: "sender_id, receiver_room_id ",
