@@ -2,7 +2,7 @@ import { User } from "@/type";
 import { supabase } from "../supabase/client";
 
 const fetchSignupUser = async (email: string) => {
-
+  // const googleUser = JSON.parse(localStorage.getIem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}")
   const {data, error} = await supabase
     .from('user')
     .select()

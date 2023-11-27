@@ -64,7 +64,7 @@ const PictCard = ({ profilepict, setProfilPict, setImportPict }: Props) => {
     }
     // setProfileImage(publicUrl as unknown as string);
     // setProfileImage(data.publicUrl);
-    // setProfilPict(data.publicUrl);
+    setProfilPict(data.publicUrl);
     // setProfileImage(data.publicUrl);
     LOCAL_STORAGE.save("imageURL", data.publicUrl);
     setProfileImage(LOCAL_STORAGE.get("imageURL"));

@@ -46,6 +46,9 @@ import { useRouter } from "next/navigation";
 import WebcamCapture from "@/components/filesUpload/webcamCapture";
 import DocumentsUpload from "@/components/filesUpload/documentsUpload";
 import Imageupload from "@/components/filesUpload/imageupload";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // import { useWhatSappContext } from "@/components/context";
 
 const Discossions = () => {
@@ -129,7 +132,7 @@ const Discossions = () => {
   };
 
   useEffect(() => {
-    fetchSignupUser(email as string)
+    fetchSignupUser(email)
       .then((data) => {
         console.log(data);
         // setCurrentUser(data);
@@ -156,7 +159,6 @@ const Discossions = () => {
       ref.current.addEventListener("click", handleClickOutSide);
     return () => document.removeEventListener("click", handleClickOutSide);
   }, [addedGroup]);
-  console.log("this is currentUser", currentUser);
 
   // this is useEffect is mainly to let user setup their profile after the have signup
   // useEffect(() => {
@@ -210,6 +212,11 @@ const Discossions = () => {
 
   const sendMessageToDB = async () => {
     if (message === "" || !receiver?.id) {
+      toast.warning("Field cannot be empty", {
+        autoClose: 1000,
+        position: toast.POSITION.TOP_CENTER,
+        hideProgressBar: true,
+      });
       console.log("message or receiver of the message can not be empty");
       return;
     }
@@ -323,9 +330,9 @@ const Discossions = () => {
 
                 <div className="flex gap-5">
                   {/* <Header switchTheme={switchTheme} label={label} /> */}
-                  <button className="text-2xl text-gray-600">
+                  {/* <button className="text-2xl text-gray-600">
                     <MdGroups2 />
-                  </button>
+                  </button> */}
                   <button
                     className="text-2xl text-gray-600 relative rounded-full"
                     onClick={() => setShowDropdownleft((prev) => !prev)}
@@ -342,7 +349,7 @@ const Discossions = () => {
                 users={users}
                 groups={groups}
                 setReceiver={setReceiver}
-                className="overflow-scroll overscroll-y-contain h-fit "
+                className=" overflow-y-auto h-fit "
                 setRoomObject={setRoomObject}
                 setUsers={setUsers}
                 setRecipient={setRecipient}
@@ -414,7 +421,8 @@ const Discossions = () => {
                   )}
                 </div>
               </div>
-              <div className=" w-full flex flex-col mt-3 px-10 h-[80vh] overflow-y-auto ">
+
+              <div className=" w-full flex flex-col mt-3 px-10 z-0 h-[80vh] overflow-y-auto ">
                 {discussionsMessages.length ? (
                   <Messages
                     messageList={discussionsMessages}
@@ -431,8 +439,18 @@ const Discossions = () => {
                   ""
                 )}
                 {showCamera && <WebcamCapture />}
-                {opendocs && <DocumentsUpload />}
-                {openImage && <Imageupload />}
+                {opendocs && (
+                  <DocumentsUpload
+                    currentUser={currentUser}
+                    receiver={receiver as User}
+                  />
+                )}
+                {openImage && (
+                  <Imageupload
+                    currentUser={currentUser}
+                    receiver={receiver as User}
+                  />
+                )}
               </div>
 
               <div
@@ -467,6 +485,7 @@ const Discossions = () => {
                   />
                 </button>
                 <div className="flex bg-white items-center rounded-md gap-5 p-1 w-full">
+                  <ToastContainer />
                   <input
                     type="text"
                     className="w-full my-2 outline-none text-gray-600 px-3 "
@@ -500,22 +519,6 @@ const Discossions = () => {
               </CreateGrt>
             )}
           </div>
-          {!profilepict ||
-            (!currentUser?.image && (
-              <div
-                className={`bg-themecolor ${
-                  openProfile ? "hidden" : "visible"
-                } flex justify-between items-center fixed w-full p-5`}
-              >
-                <p>Welcome to WhatsApp Clone..!</p>
-                <button
-                  onClick={() => setOpenProfile(true)}
-                  className="border p-2 rounded-full"
-                >
-                  setup your profile
-                </button>
-              </div>
-            ))}
         </>
       )}
     </>

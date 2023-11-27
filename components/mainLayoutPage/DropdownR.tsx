@@ -1,16 +1,11 @@
 "use client";
-import React, { ChangeEvent, forwardRef, useState } from "react";
+import React, { forwardRef } from "react";
 import { useRef } from "react";
 import { TbFileDescription } from "react-icons/tb";
 import { MdPhotoLibrary } from "react-icons/md";
 import { AiFillCamera } from "react-icons/ai";
-import { FaUserLarge } from "react-icons/fa6";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquarePollHorizontal } from "@fortawesome/free-solid-svg-icons";
-import { WiStars } from "react-icons/wi";
 import { supabase } from "@/utils/supabase/client";
 import { useWhatSappContext } from "../context";
-import { fileURLToPath } from "url";
 
 export interface IAppProps {}
 
@@ -22,42 +17,49 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
   const { opendocs, setOpendocs } = useWhatSappContext();
   const { openImage, setOpenImage } = useWhatSappContext();
 
-  const handleFileChange = (event: any) => {
+  const handleFileChange = async (event: any) => {
     const file = event.target.files[0];
     const fileURL = URL.createObjectURL(file);
     setOpendocs(fileURL);
-    // console.log(typeof opendocs);
+    const bucket = "whatsapp_avatars";
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload("fileURl", file);
+
+    if (error) {
+      console.error("error adding docs", error);
+    } else {
+      console.log("image added data", data);
+      const imageUrl = supabase.storage.from(bucket).getPublicUrl(data.path);
+      console.log("send image url", imageUrl.data.publicUrl);
+      return imageUrl.data.publicUrl;
+    }
   };
 
-  const handleImageupload = (event: any) => {
+  const handleImageupload = async (event: any) => {
     const file = event.target.files[0];
     const fileURL = URL.createObjectURL(file);
     setOpenImage(fileURL);
+
+    const bucket = "whatsapp_avatars";
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(fileURL, file);
+
+    if (error) {
+      console.error("error adding docs", error);
+    } else {
+      console.log("image added data", data);
+      const imageUrl = supabase.storage.from(bucket).getPublicUrl(data.path);
+      console.log("send image url", imageUrl.data.publicUrl);
+      return imageUrl.data.publicUrl;
+    }
   };
 
   const handleOpenFilePicker = () => {
-    // if (hiddenFileInputRef && hiddenFileInputRef.current)
     hiddenFileInputRef.current.click();
-
-    // const inputFile = document.createElement("input") as HTMLInputElement;
-    // inputFile.type = "file";
-    // inputFile.accept = "docs, pdf, word";
-    // inputFile.addEventListener("change", (e: any) => {
-    //   const file = e.target.files[0];
-    //   const fileUrl = URL.createObjectURL(file);
-    //   setOpendocs(fileUrl);
-    //   const reader = new FileReader();
-    //   reader.addEventListener("load", (e: any) => {
-    //     const fileContent = reader.result;
-    //     if (fileContent) {
-    //       setOpenImage(fileContent as string);
-    //       setOpendocs(fileContent as string);
-    //     }
-    //   });
-    //   reader.readAsBinaryString(file);
-    // });
-
-    // inputFile.click();
   };
 
   // const handleUploadFile = async () => {
@@ -88,7 +90,7 @@ const DropDownR = forwardRef<HTMLUListElement>((props: IAppProps, ref) => {
   return (
     <ul
       ref={ref}
-      className="absolute mb-80 py-2 w-[250px] bg-white shadow-xl  delay-7000 transform transition-duration-10000   translate-x-12 -scale-20  ease-in-out rounded-[16px] font-sans font-medium"
+      className="absolute mb-[35vh] py-2 w-[250px] bg-white shadow-xl  delay-7000 transform transition-duration-10000   translate-x-12 -scale-20  ease-in-out rounded-[16px] font-sans font-medium"
     >
       <li
         onClick={() => setOpendocs((prev: any) => !prev)}

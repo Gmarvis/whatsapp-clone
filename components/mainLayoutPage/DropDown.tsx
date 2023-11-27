@@ -47,6 +47,7 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
     if (value === "Import a picture") {
       const inputFile = document.createElement("input") as HTMLInputElement;
       inputFile.type = "file";
+
       inputFile.addEventListener("change", (e: any) => {
         const file = e.target.files[0];
         setSendingFile(file);

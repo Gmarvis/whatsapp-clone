@@ -36,7 +36,7 @@ const CreateGroup = ({ users, currentUser }: Props) => {
   const [membersID, setMembersId] = useState<Array<string>>([]);
   const [showNextBtn, setShowNextBtn] = useState(false);
   const [groupSetup, setGroupSetup] = useState(true);
-  const [notify, setNotify] = useState<string>("")
+  const [notify, setNotify] = useState<string>("");
 
   useEffect(() => {
     LOCAL_STORAGE.save("group_members", []);
@@ -46,18 +46,19 @@ const CreateGroup = ({ users, currentUser }: Props) => {
   // Add group members
   function handleDirectMessage(member: any) {
     if (members.find((user) => user.id === member.id)) {
-      setNotify("Already added")
-      
+      setNotify("Already added");
+
       console.log("aready added");
       return;
     }
 
     setTimeout(() => {
-      setNotify('')
-    }, 1000)
+      setNotify("");
+    }, 1000);
 
     let selectedMember = members;
     selectedMember.push(member);
+    setShowNextBtn(true);
 
     LOCAL_STORAGE.save("group_members", selectedMember);
     setMembers(LOCAL_STORAGE.get("group_members"));
@@ -75,6 +76,7 @@ const CreateGroup = ({ users, currentUser }: Props) => {
     const filteredMembers = members.filter((member) => member.id !== id);
     setMembers(filteredMembers);
     LOCAL_STORAGE.save("group_members", filteredMembers);
+    if (members.length === 0) setShowNextBtn(false);
   };
 
   const openGroupSetup = () => {
@@ -127,7 +129,7 @@ const CreateGroup = ({ users, currentUser }: Props) => {
               />
             </div>
             <div></div>
-            <div className="px-3 h-[60vh] overflow-scroll">
+            <div className="px-3 h-[60vh] overflow-auto">
               {users && (
                 <div className="flex gap-2 w-full flex-col ">
                   {users?.map((item: any) => (
@@ -166,12 +168,14 @@ const CreateGroup = ({ users, currentUser }: Props) => {
                   ))}
                 </div>
               )}
-              <div className="flex justify-center items-center w-full p-3 relative bottom-0 left-0">
+            </div>
+            {showNextBtn && (
+              <div className="flex justify-center transition duration-1000 items-center ease-in-out bg-white w-full p-4 sticky bottom-0 left-0">
                 <button className="text-themecolor" onClick={openGroupSetup}>
                   <FaCircleArrowRight size={40} />
                 </button>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

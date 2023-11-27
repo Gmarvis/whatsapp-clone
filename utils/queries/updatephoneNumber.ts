@@ -1,5 +1,6 @@
 import { User } from "@/type"
 import { supabase } from "../supabase/client"
+import { LOCAL_STORAGE } from "../service/storage"
 
 const updatePhoneNumber = async (phone: string | undefined) => {
 	const currentUser: User = JSON.parse(localStorage.getItem('sender') || '{}')
@@ -12,6 +13,7 @@ const updatePhoneNumber = async (phone: string | undefined) => {
 	
 	if (error) console.log("could not update", error)
 	if (data) {
+		LOCAL_STORAGE.save('sender', data)
 		console.log('successfully updated', data)
 	}
 }

@@ -12,8 +12,7 @@ type Props = {
 
 const ShowProfilePicture = (props: Props) => {
   const { setShowPPicture } = useWhatSappContext();
-  const sender: User = JSON.parse(localStorage.getItem("sender") || '{}')
-
+  const sender: User = JSON.parse(localStorage.getItem("sender") || "{}");
 
   return (
     <div className="relative w-[100vw] h-screen bg-whatsappimg z-0 cursor-pointer overflow-hidden">
@@ -21,12 +20,24 @@ const ShowProfilePicture = (props: Props) => {
         <div className="flex gap-3 w-full cursor-pointer">
           <Avatar
             onClick={() => {}}
-            profilePicture={(sender.image !== '') ? `${sender.image}` : "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="}
+            profilePicture={
+              sender.image !== ""
+                ? `${sender.image}`
+                : "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
+            }
             size={10}
           />
           <div>
-          {(sender?.name !== '') ? <h4 className="text-gray-700">{sender?.name}</h4> : <h4 className="text-gray-700">{sender?.email}</h4>}
-            {(sender?.phone !== '') ? <p className="text-gray-500 text-xs">{sender?.phone}</p> : <p className="text-gray-500 text-xs">{sender?.email}</p> }
+            {sender?.name !== "" ? (
+              <h4 className="text-gray-700">{sender?.name}</h4>
+            ) : (
+              <h4 className="text-gray-700">{sender?.email}</h4>
+            )}
+            {sender?.phone !== "" ? (
+              <p className="text-gray-500 text-xs">{sender?.phone}</p>
+            ) : (
+              <p className="text-gray-500 text-xs">{sender?.email}</p>
+            )}
           </div>
         </div>
 

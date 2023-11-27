@@ -7,9 +7,13 @@ import EmojiePicker from "./EmojiePicker";
 import Image from "next/image";
 import { useWhatSappContext } from "../context";
 import updateUserName from "@/utils/queries/updateUserName";
+import { IoMdClose } from "react-icons/io";
+
 import updatePhoneNumber from "@/utils/queries/updatephoneNumber";
 import { User } from "@/type";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePageContent = () => {
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -17,7 +21,6 @@ const ProfilePageContent = () => {
   const [shosenEmojiesup, setShosenEmojiesup] = useState<string[]>([]);
   const [shosenEmojiesdow, setShosenEmojiesdow] = useState<string[]>([]);
 
-  // * change the name david beckamp by the user name
   const sender: User = JSON.parse(localStorage.getItem("sender") || "{}");
   const [profileName, setProfileName] = useState<string>(sender.name);
   const [phone, setPhone] = useState<string | undefined>(sender?.phone);
@@ -60,14 +63,36 @@ const ProfilePageContent = () => {
   }, []);
 
   const handleUpdateName = (name: string) => {
-    updateUserName(name);
-    console.log("profile name", profileName);
-    setShowInput1((prev) => !prev);
+    if (name !== "") {
+      updateUserName(name)
+        .then((res) => {
+          toast.success("Updated successfully", { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+        })
+        .catch((err) => {
+          if (err instanceof Error) console.log(err)
+          toast.error('Failed to update name', { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+        })
+      console.log("profile name", profileName);
+      setShowInput1((prev) => !prev);
+    } else {
+      toast.error('Field cannot be empty', { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+    }
   };
 
   const handleUpdatePhone = (phone: string | undefined) => {
     setShowInput((prev) => !prev)
-    updatePhoneNumber(phone)
+    if (phone === "") {
+      toast.error('Field cannot be empty', { autoClose: 2000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+    } else {
+      updatePhoneNumber(phone)
+        .then((res) => {
+          toast.success("Updated successfully", { autoClose: 2000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+        })
+        .catch((err) => {
+          if (err instanceof Error) console.log(err)
+        })
+    }
+
   }
 
   return (
@@ -83,8 +108,9 @@ const ProfilePageContent = () => {
         }
         ref={dropdownRef}
       />
-
+      <ToastContainer />
       <div className=" rest">
+
         <div className=" flex flex-col gap-2 w-full pl-7 px-7  py-3  shadow shadow-zinc-200 bg-white">
           <div className=" flex items-center gap-3">
             <span className=" text-[#33a033]">Your name</span>
@@ -122,23 +148,27 @@ const ProfilePageContent = () => {
               />
 
               <div className=" flex justify-center items-center text-[#778086]">
+
                 <span className=" mr-2 cursor-pointer">
                   <EmojiePicker
                     getShosenEmojie={getShosenEmojieup}
                     placement="right"
                   />
                 </span>
+                <div>
+                  <span
+                    className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                    onClick={() => handleUpdateName(profileName)}
+                  >
+                    <AiOutlineCheck size={23} />
+                  </span>
+
+                </div>
                 <span
-                  className=" mr-0 cursor-pointer"
-                  onClick={() => handleUpdateName(profileName)}
+                  className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                  onClick={() => setShowInput1((prev) => !prev)}
                 >
-                  <AiOutlineCheck size={23} />
-                </span>
-                <span
-                  className=" mr-0 cursor-pointer"
-                  onClick={() => handleUpdateName(profileName)}
-                >
-                  <AiOutlineCheck size={23} />
+                  <IoMdClose size={23} />
                 </span>
               </div>
             </div>
@@ -169,8 +199,8 @@ const ProfilePageContent = () => {
           {!showInput ? (
             <div className="flex justify-between align-baseline">
               <div className="flex align-baseline gap-6 ">
-                <FaPhone size={25} />
-                <p className="text-lg">{phone}</p>
+                <FaPhone size={20} />
+                {phone ? <p className="text-sm">{phone}</p> : <p className="text-sm">(+237)</p>}
               </div>
               <span
                 className=" italic text-[10px] font-thin text-black cursor-pointer"
@@ -188,17 +218,20 @@ const ProfilePageContent = () => {
                 value={phone}
               />
               <div className=" flex justify-center items-center text-[#778086]">
-                <span className=" mr-2 cursor-pointer">
-                  <EmojiePicker
-                    getShosenEmojie={getShosenEmojiedow}
-                    placement="rightEnd"
-                  />
-                </span>
+                <div>
+                  <span
+                    className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                    onClick={() => handleUpdatePhone(phone)}
+                  >
+                    <AiOutlineCheck size={23} />
+                  </span>
+                  {/* <ToastContainer /> */}
+                </div>
                 <span
-                  className=" mr-0 cursor-pointer"
-                  onClick={() => handleUpdatePhone(phone)}
+                  className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                  onClick={() => setShowInput((prev) => !prev)}
                 >
-                  <AiOutlineCheck size={23} />
+                  <IoMdClose size={23} />
                 </span>
               </div>
             </div>

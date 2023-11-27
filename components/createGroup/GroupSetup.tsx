@@ -10,7 +10,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { FaRegLaugh } from "react-icons/fa";
 // import EmojiePicker from "./EmojiePicker";
 import Image from "next/image";
-import { useWhatSappContext } from "../context";
+// import { useWhatSappContext } from "../context";
 import EmojiePicker from "../profilPage/EmojiePicker";
 import { IoIosArrowForward } from "react-icons/io";
 import { VscPassFilled } from "react-icons/vsc";
@@ -21,7 +21,7 @@ import { data } from "autoprefixer";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import CardWithoutTitleB from "./CardWithoutTitleB";
 import { useProfileContext } from "../context/profileContext";
-// import { useWhatSappContext } from "@/components/context";
+import { useWhatSappContext } from "@/components/context";
 
 const GroupSetup = () => {
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -36,6 +36,8 @@ const GroupSetup = () => {
 
   const { groupIcon, profileImage, setAddedGroup } = useWhatSappContext();
   const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
+
+  // const { groupIcon, setGroupIcon } = useWhatSappContext();
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -103,7 +105,7 @@ const GroupSetup = () => {
         {
           name: profileName,
           // user_id: senderId,
-          image: currentUser.image,
+          image: groupIcon,
           status: true,
         },
       ])
@@ -155,7 +157,7 @@ const GroupSetup = () => {
       {/* //** add profile image and profile name here  */}
       <CardWithoutTitleB
         image={
-          profileImage ||
+          groupIcon ||
           "https://i.pinimg.com/564x/cb/9d/bb/cb9dbbffa2363a2ec0d7a74602b91cd4.jpg"
         }
         ref={dropdownRef}
@@ -170,7 +172,7 @@ const GroupSetup = () => {
                   src={emoji}
                   alt="emojie"
                   width={20}
-                  height={20} 
+                  height={20}
                   key={index}
                 />
               ))}
@@ -195,53 +197,6 @@ const GroupSetup = () => {
               </span>
             </div>
           </div>
-        </div>
-
-        {/* <div className=" flex flex-col gap-4 w-full px-7 py-3 shadow shadow-zinc-200 bg-white">
-          <div className=" flex items-center gap-3">
-            <span className=" text-[#33a033]">Infos</span>
-            <span className=" inline-flex items-center">
-              {shosenEmojiesdow?.map((emoji, index) => (
-                <Image
-                  src={emoji}
-                  alt="emojie"
-                  width={20}
-                  height={20}
-                  key={index}
-                />
-              ))}
-            </span>
-          </div>
-
-          <div className=" flex justify-between items-center pb-[5px] border-solid border-b-2 border-b-[#778086]">
-            <input
-              type="text"
-              className="inputprofile w-full pl-0 px-2 py-0 text-[#242f36] text-md focus:outline-none focus:ring-none focus:border-none"
-              onChange={(e) => setProfileDescription(e.target.value)}
-              value={profileDescription}
-            />
-            <div className=" flex justify-center items-center text-[#778086]">
-              <span className=" mr-2 cursor-pointer">
-                <EmojiePicker
-                  getShosenEmojie={getShosenEmojiedow}
-                  placement="rightEnd"
-                />
-              </span>
-              <span className=" mr-0 cursor-pointer">
-                <AiOutlineCheck size={23} />
-              </span>
-            </div>
-          </div>
-        </div> */}
-        <div className="">
-          <button className="flex items-center justify-between bg-white w-full px-7 pt-4 pb-5">
-            <p className="flex flex-col self-start text-start">
-              <span>Disappearing Measages</span>
-              <span>off</span>
-            </p>
-
-            <IoIosArrowForward />
-          </button>
         </div>
 
         <div className="flex justify-center w-full pb-10">

@@ -25,7 +25,7 @@ const SideNavRight = React.memo((props: Props) => {
     <div
       className={
         openSideNav || openContactInfo
-          ? " w-[25vw] inline-block text-[#3b4a54] bg-white transition duration-1000 ease-in-out py-0"
+          ? " w-[25vw] inline-block text-[#3b4a54] transition duration-1000 ease-in-out py-0"
           : " hidden w-0"
       }
     >
