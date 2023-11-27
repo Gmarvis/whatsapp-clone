@@ -37,7 +37,7 @@ const DirectMessage = ({
 }: Props) => {
   // to style the select room
   const [target, setTarget] = useState<string>("");
-  const [discussions, setDiscussons] = useState<User[]>([]);
+  const { setShowPPicture } = useWhatSappContext();
 
   dayjs.extend(relativeTime);
 
@@ -61,84 +61,81 @@ const DirectMessage = ({
     setRoomObject(room);
     setReceiver(room);
     console.log("single room object", room);
-    const updateMessage = await updateReadMessageStatus(
-      lastMessage?.sender_id,
-      room.id as string
-    );
+
+    await updateReadMessageStatus(user_id, currentUserRoomId as string);
   };
 
-  const handleClick = () => {
-    // console.log('updated_at', users[0].updated_at)
-    // const lastMsg = dayjs().to(dayjs(users[0].updated_at))
-    // console.log("time from dayjs", lastMsg);
-  };
-
-  let lastRecievedMessage = "";
-
+  function handleClick() {
+    setShowPPicture(true);
+  }
 
   return (
     <div className={` ${openProfile ? "hidden" : className} `}>
       {users.length ? (
         <div className="flex gap-2 p-0 w-full h-[85vh] flex-col">
-          {discussions?.map((discussion: any) => {
-            lastRecievedMessage =
-              discussion.user_id === lastMessage?.sender_id
-                ? lastMessage.content
-                : "";
-            return (
-              <div
-                onClick={() => handleDirectMessage(discussion.user_id)}
-                key={discussion.id}
-                className={
-                  target === discussion.user_id
-                    ? "bg-gray-300 flex w-full justify-between border-b border-slate-100 py-1 gap-1 hover:cursor-pointer px-4 items-center "
-                    : "flex w-full justify-between border-b border-slate-100  gap-1 hover:bg-gray-100 hover:cursor-pointer px-4 py-1 items-center "
-                }
-              >
-                <div className="flex items-center gap-3 ">
-                  <Avatar
-                    onClick={() => handleClick()}
-                    profilePicture={
-                      discussion.image !== ""
-                        ? `${discussion.image}`
-                        : "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
-                    }
-                    size={10}
-                    className="my-auto"
-                  />
-                  <div className="leading-2 ">
-                    {discussion.name !== "" ? (
-                      <h6 className="py-1 text-sm text-[#212021] ">
-                        {discussion.name}
-                      </h6>
-                    ) : (
-                      <p className="py-1 text-xs text-[#111011] font-normal">
-                        {discussion.email}
-                      </p>
-                    )}
+          {users
+            ?.sort(
+              (user1: any, user2: any) => user1.updated_at - user2.updated_at
+            )
+            .map((discussion: any) => {
+              return (
+                <div
+                  onClick={() => handleDirectMessage(discussion.user_id)}
+                  key={discussion.id}
+                  className={
+                    target === discussion.user_id
+                      ? "bg-gray-300 flex w-full justify-between border-b border-slate-100 py-1 gap-1 hover:cursor-pointer px-4 items-center "
+                      : "flex w-full justify-between border-b border-slate-100  gap-1 hover:bg-gray-100 hover:cursor-pointer px-4 py-1 items-center "
+                  }
+                >
+                  <div className="flex items-center gap-3 ">
+                    <Avatar
+                      onClick={() => handleClick()}
+                      profilePicture={
+                        discussion.image !== ""
+                          ? `${discussion.image}`
+                          : "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
+                      }
+                      size={10}
+                      className="my-auto"
+                    />
+                    <div className="leading-2 ">
+                      {discussion.name !== "" ? (
+                        <h6 className="py-1 text-sm text-[#212021] ">
+                          {discussion.name}
+                        </h6>
+                      ) : (
+                        <p className="py-1 text-xs text-[#111011] font-normal">
+                          {discussion.email}
+                        </p>
+                      )}
 
-                    <span className="py-8 text-[14px]">
-                      {lastRecievedMessage}
-                    </span>
+                      <span className="py-8 text-[14px]">
+                        {discussion.last_message}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col gap-1 w-[70px]">
-                  <span className="mx-auto text-[#1FA855]">
-                    {dayjs().to(dayjs(discussion?.updated_at))}
-                  </span>
-                  <span className=" p-[5px] w-6 h-6 min-w-fit min-h-fit rounded-full    bg-[#25c460] text-white text-[14px] font-[SF Pro Text] flex justify-center items-center">
-                    {discussion.unread_count ?? 0}
-                  </span>
-                  {/* <button
+                  <div className="flex flex-col gap-1 w-[70px]">
+                    <span className="mx-auto text-[#1FA855]">
+                      {dayjs().to(dayjs(discussion?.updated_at))}
+                    </span>
+                    <span
+                      className={` p-[5px] w-6 h-6 min-w-fit min-h-fit rounded-full  ${
+                        discussion.unread_count ? "opacity-100" : "opacity-0"
+                      }   bg-[#25c460] text-white text-[14px] font-[SF Pro Text] flex justify-center items-center`}
+                    >
+                      {discussion.unread_count ?? 0}
+                    </span>
+                    {/* <button
                   className="hover:bg-gray-300 rounded-full w-fit self-center"
                   onClick={() => removeMember(item.id)}
                 >
                   <IoIosClose size={20} />
                 </button> */}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       ) : (
         ""

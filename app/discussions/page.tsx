@@ -39,9 +39,7 @@ import CreateGroup from "@/components/createGroup/CreateGroup";
 import { getGroupMembers } from "@/utils/queries/getGroupMembers";
 import DOMPurify from "isomorphic-dompurify";
 
-import { useRouter } from "next/navigation";
 import { updateUnreadMessageCount } from "@/utils/queries/updateUnreadMessageCount";
-import { addUnreadMessageCountToUser } from "@/utils/queries/addUnreadMessagesCountToUser";
 
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
@@ -53,8 +51,6 @@ const Discossions = () => {
   const [currentUser, setCurrentUser] = useState<User>(() =>
     JSON.parse(localStorage.getItem("sender") || "{}")
   );
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [rooms, setRooms] = useState<Promise<any[] | undefined>[]>([]);
   const [userInGroupsCreations, setUserInGroupsCreations] = useState<User[]>(
     []
   );
@@ -247,16 +243,6 @@ let i = 0;
           .catch((err) => console.log(err));
 
         if (payload.eventType === "UPDATE") {
-          updateUnreadMessageCount(
-            payload.new.sender_id,
-            payload.new.receiver_room_id,
-            true,
-            payload.new.content
-          )
-            .then((data) => {
-              if (data?.data) console.log("update unread message count", data);
-            })
-            .catch((err) => console.log(err));
           const newIndex: number = discussionsMessages?.findIndex(
             (message: any) => message.id === payload.new.id
           );
@@ -302,44 +288,20 @@ let i = 0;
               ...prev,
               { ...payload.new, receiver_room_id: currentUserRoomId },
             ]);
-          } else {
-            setDiscussionsMessages((prev) => [...prev, payload.new]);
-          }
-        }
+          } else setDiscussionsMessages((prev) => [...prev, payload.new]);
+
+        updateUnreadMessageCount(
+          payload.new.sender_id,
+          payload.new.receiver_room_id,
+          payload.new.content
+        )
+          .then((data) => {
+            if (data) console.log("update unread message count", data);
+          })
+          .catch((err) => console.log(err));
       }
     )
     .subscribe();
-    
-  const unreadMessages = supabase
-    .channel("custom-insert-channel")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "unread_messages" },
-      async (payload: any) => {
-        console.log("Change received from unread_message table!", payload);
-
-        const index = users?.findIndex(
-          (user: User) => user.user_id === payload.new.sender_id
-        );
-        if (
-          index !== -1 &&
-          payload.new.receiver_room_id === currentUserRoomId
-        ) {
-          console.log("trying to swap", payload);
-          users[index] = {
-            ...users[index],
-            unread_count: payload.new.unread_count,
-            last_message: payload.new.last_message,
-            updated_at: payload.new.updated_at,
-          };
-          users[0] = users.splice(index, 1, users[0])[0];
-          setUsers(users);
-        }
-      }
-    )
-    .subscribe();
-
-
 
   const unreadMessages = supabase
     .channel("custom-insert-channel")
@@ -353,12 +315,16 @@ let i = 0;
           (user: User) =>
             user.user_id === payload.new.sender_id 
         );
-        if (index !== -1 &&
-          payload.new.receiver_room_id === currentUserRoomId) {
+        if (
+          index !== -1 &&
+          payload.new.receiver_room_id === currentUserRoomId
+        ) {
           console.log("trying to swap", payload);
           users[index] = {
             ...users[index],
             unread_count: payload.new.unread_count,
+            last_message: payload.new.last_message,
+            updated_at: payload.new.updated_at,
           };
           users[0] = users.splice(index, 1, users[0])[0];
           setUsers(users);
