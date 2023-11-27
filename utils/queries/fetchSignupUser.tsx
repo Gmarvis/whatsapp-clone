@@ -1,19 +1,18 @@
-import { User } from "@/type";
 import { supabase } from "../supabase/client";
 
 const fetchSignupUser = async (email: string) => {
+  console.log(email);
   const { data, error } = await supabase
     .from("user")
     .select()
     .eq("email", email)
     .single();
-  if (error) console.log("Error while getting single signup user", error);
+
+  if (error) console.log("error while fetching signup user", error);
   if (data) {
-    console.log("here is signup user", data);
+    console.log("Here is signup user", data);
     localStorage.setItem("sender", JSON.stringify(data));
   }
-  return data as User;
+  return data[0];
 };
 export default fetchSignupUser;
-
-

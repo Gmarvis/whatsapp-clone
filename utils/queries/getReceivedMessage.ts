@@ -10,11 +10,12 @@ export const getReceivedMessages = async (
   });
 
   if (error) {
-    console.log("unable to get recieved msgs", error)
-    return};
+    console.log("unable to get recieved msgs", error);
+    return;
+  }
 
   if (data) {
-    console.log('these are messages', data)
+    // console.log('these are messages', data)
     return data;
   }
 };

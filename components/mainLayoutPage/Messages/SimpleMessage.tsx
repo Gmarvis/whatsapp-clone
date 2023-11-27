@@ -20,9 +20,9 @@ const SimpleMessage = (props: SimpleProps) => {
           {props.phoneNumber}
         </span>{" "}
       </div>
-      <div className=" flex flex-col gap-1">
-        <p> {props.content}</p>
-        <span className=" flex justify-end">{props.time}</span>
+      <div className=" flex flex-col gap-[2px]">
+        <span className=" "> {props.content}</span>
+        <span className=" flex justify-end text-[#667781]">{props.time}</span>
       </div>
     </div>
   );

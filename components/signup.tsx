@@ -1,23 +1,10 @@
 "use client";
 import React, { useEffect } from "react";
 import Image from "next/image";
-import { supabase } from "@/utils/supabase/client";
 import GoogleButton from "./atoms/googlebtn";
-import { redirect, useRouter } from "next/navigation";
-import { AuthResponse } from "@supabase/supabase-js";
 
 const Signup = () => {
-
   if (typeof localStorage === "undefined") return;
-
-  async function handleSignInWithGoogle(response: { credential: any; }) {
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token: response.credential,
-      nonce: 'NONCE', // must be the same one as provided in data-nonce (if any)
-    })
-  }
-
 
   return (
     <div>
@@ -37,7 +24,6 @@ const Signup = () => {
 
           <GoogleButton />
         </div>
-        
       </div>
     </div>
   );

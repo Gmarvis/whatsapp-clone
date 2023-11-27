@@ -38,4 +38,4 @@ const ProfilePage = ({ title, children }: Props) => {
   );
 };
 
-export default ProfilePage;
+export default React.memo(ProfilePage);

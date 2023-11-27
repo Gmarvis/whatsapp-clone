@@ -112,7 +112,7 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
       {!(popupMod && reportPopup && delPopup && cancelPopup && disconPopup) && (
         <ul
           ref={ref}
-          className="absolute mt-8 py-2 w-[250px] bg-white rounded-md shadow-xl transition-transform delay-5000 ease-in-out -translate-x-48 z-100"
+          className="absolute mt-8 py-2 w-[250px] bg-white rounded-md shadow-xl z-2 transition-transform delay-5000 ease-in-out -translate-x-48 z-100"
         >
           {props.dropdownList.map((value, index) => (
             <li

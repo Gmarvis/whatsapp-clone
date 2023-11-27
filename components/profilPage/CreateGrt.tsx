@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useProfileContext } from "../context/profileContext";
-import { useWhatSappContactContext } from "../context/Context";
 
 type Props = {
   title: string;
@@ -10,8 +9,6 @@ type Props = {
 };
 
 const CreateGrt = ({ title, children }: Props) => {
-  // const [openCreateGroup, setOpenCreateGroup] = useState<boolean>(true);
-
   const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
 
   return (

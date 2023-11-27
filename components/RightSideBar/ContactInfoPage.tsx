@@ -30,7 +30,7 @@ const ContactInfoPage = ({ roomObject }: Props) => {
   // console.clear();
   // console.log("room: ", roomObject);
   return (
-    <div className={` flex flex-col space-y-2  max-h-[90vh] overflow-auto`}>
+    <div className={` flex flex-col space-y-2  h-[80%] overflow-auto`}>
       <Card
         image={
           roomObject?.image ||

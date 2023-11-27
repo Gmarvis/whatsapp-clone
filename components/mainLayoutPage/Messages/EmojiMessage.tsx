@@ -8,13 +8,12 @@ type Props = {
 const Emojis = ["🙏", "❤️", "😂", "😮", "😥", "👍"];
 
 const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
+  // const EmojiMessage = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState("");
   const handleEmojie = async (emoji: string) => {
     await props.setEmojie(emoji);
     setTarget(emoji);
   };
-
-  console.log("clicked");
 
   return (
     <div className={props.classname} ref={ref}>
@@ -27,7 +26,7 @@ const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
               className={
                 target === emoji
                   ? "bg-slate-300 rounded-full w-10 h-10 flex justify-center items-center"
-                  : ""
+                  : "hover:bg-slate-300 rounded-full w-10 h-10 flex justify-center items-center"
               }
             >
               {emoji}

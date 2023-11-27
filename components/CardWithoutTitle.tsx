@@ -57,4 +57,4 @@ const CardWithoutTitle = forwardRef<HTMLUListElement, Props>((props, ref) => {
   );
 });
 
-export default CardWithoutTitle;
+export default React.memo(CardWithoutTitle);

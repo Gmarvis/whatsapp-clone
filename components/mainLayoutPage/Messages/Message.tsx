@@ -22,18 +22,16 @@ type Props = {
   showMessageEmoji: any;
   setMessageEmoji: React.Dispatch<React.SetStateAction<boolean>>;
   currentUserRoomId: string;
-  recipient: User;
+  // recipient: User;
   isGroupdiscussion: boolean;
 };
 const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState<string>(props.messageList[0].id);
   const [emojie, setEmojie] = useState<string>();
   const [messageId, setMessageId] = useState<string>("");
-  const [oldmessageId, setOldmessageId] = useState<string>("");
-  const emojieRef = useRef<HTMLDivElement | null>(null);
 
-  const classForMessageReceiver = "align-left";
-  const classForMessageSender = "box-row align-right";
+  const classForMessageReceiver = "align-left max-w-4/5 min-w-fit";
+  const classForMessageSender = "box-row align-right  max-w-4/5 min-w-fit";
 
   const handleTargetEmoji = async (id: string) => {
     if (id === target) {
@@ -59,6 +57,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
     if (data) console.log("message containing emoji: ", data);
     if (error) console.log("Error inserting emoji: ", error);
+    props.setMessageEmoji(false);
   };
 
   let content;
@@ -186,7 +185,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
       messages.receiver_room_id === props.currentUserRoomId &&
       messages.sender_id !== props.currentUser.id
     ) {
-      console.log("messages received: ", messages.content);
+      // console.log("messages received: ", messages.content);
 
       return (
         <>
@@ -212,12 +211,14 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
                   .slice(0, 5)}
               />
             )}
-            <span
-              className=" opacity-0 hover:opacity-100 mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
-              onClick={() => handleTargetEmoji(messages.id)}
-            >
-              <FaFaceGrinWide className=" text-white" size={20} />
-            </span>
+            <div className=" opacity-0 hover:opacity-100 flex justify-start items-center w-full">
+              <span
+                className=" mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
+                onClick={() => handleTargetEmoji(messages.id)}
+              >
+                <FaFaceGrinWide className=" text-white" size={20} />
+              </span>
+            </div>
           </div>
           {props.showMessageEmoji && messages.id === target && (
             <EmojiMessage
@@ -248,17 +249,19 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           {props.showMessageEmoji && messages.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
-              classname="absolute top-[250px] right-[300px]"
+              classname="relative -right-72 top-5"
               ref={ref}
             />
           )}
-          <div className="flex justify-end" key={i}>
-            <span
-              className=" opacity-0 hover:opacity-100 mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
-              onClick={() => handleTargetEmoji(messages.id)}
-            >
-              <FaFaceGrinWide className=" text-white" size={20} />
-            </span>
+          <div className="flex justify-end items-center" key={i}>
+            <div className=" opacity-0 hover:opacity-100 flex justify-end items-center w-full">
+              <span
+                className="  mx-1  hover:block  rounded-full bg-[#a3adb3a7] w-8 h-8 flex justify-center items-center place-content-center pl-[6px] pt-[5px] cursor-pointer"
+                onClick={() => handleTargetEmoji(messages.id)}
+              >
+                <FaFaceGrinWide className=" text-white" size={20} />
+              </span>
+            </div>
 
             {props.isGroupdiscussion ? (
               <SimpleMessage

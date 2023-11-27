@@ -26,6 +26,8 @@ type User = {
   phone?: string;
   updated_at?: string;
   user_id?: string;
+  unread_count?: number;
+  last_message?: string;
 };
 
 type Message = {
@@ -40,6 +42,7 @@ type Message = {
   receiver_room_id?: string;
   sender_name?: string;
   phone_number?: string;
+  is_read?: boolean;
 };
 
 type Group = {
@@ -63,3 +66,10 @@ type Room = {
 };
 
 type PartRoomUser = Pick<Room | "updated_at" | "name" | "image"> & User;
+
+type FetchUser = {
+  merged: any[];
+  data: any[];
+  groups: any[];
+  currentUserRoomId: string | undefined;
+};

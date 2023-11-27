@@ -1,14 +1,6 @@
 "use client";
-// import React from "react";
-import { FaCheckCircle } from "react-icons/fa";
-// import ProfilePageContent from "../profilPage/ProfilePageContent";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { RiPencilFill } from "react-icons/ri";
-import CardWithoutTitle from "../CardWithoutTitle";
-import { AiOutlineCheck } from "react-icons/ai";
-import { FaRegLaugh } from "react-icons/fa";
-// import EmojiePicker from "./EmojiePicker";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 // import { useWhatSappContext } from "../context";
 import EmojiePicker from "../profilPage/EmojiePicker";
@@ -17,25 +9,22 @@ import { VscPassFilled } from "react-icons/vsc";
 import CreateGroup from "./CreateGroup";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { supabase } from "@/utils/supabase/client";
-import { data } from "autoprefixer";
-import { RealtimeChannel } from "@supabase/supabase-js";
+
 import CardWithoutTitleB from "./CardWithoutTitleB";
 import { useProfileContext } from "../context/profileContext";
 import { useWhatSappContext } from "@/components/context";
 
 const GroupSetup = () => {
-  const [showInput, setShowInput] = useState<boolean>(false);
-  const [showInput1, setShowInput1] = useState<boolean>(false);
   const [shosenEmojiesup, setShosenEmojiesup] = useState<string[]>([]);
   const [shosenEmojiesdow, setShosenEmojiesdow] = useState<string[]>([]);
 
   // * change the name david beckamp by the user name
-  const [profileName, setProfileName] = useState<string>("");
-  const [profileDescription, setProfileDescription] = useState<string>("");
+  const [groupName, setGroupName] = useState<string>("");
+
   const [showDropdrownProfile, setShowDropdownProfile] = useState(false);
 
-  const { groupIcon, profileImage, setAddedGroup } = useWhatSappContext();
-  const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
+  const {groupIcon, profileImage, setAddedGroup } = useWhatSappContext();
+  const { setShowCreateGroupe } = useProfileContext();
 
   // const { groupIcon, setGroupIcon } = useWhatSappContext();
 
@@ -92,19 +81,18 @@ const GroupSetup = () => {
   ];
 
   // handle create group
-  let subscription: RealtimeChannel;
+
   const handleCreateGroup = async () => {
     const groupMembers = LOCAL_STORAGE.get("group_members");
     const currentUser = LOCAL_STORAGE.get("sender");
-    const senderId = currentUser.id;
-    const membersID = groupMembers.map((member: User) => member.id);
+    let membersID = groupMembers.map((member: User) => member.id);
 
     const { data, error } = await supabase
       .from("rooms")
       .insert([
         {
-          name: profileName,
-          // user_id: senderId,
+          name: groupName,
+          created_by: currentUser.id,
           image: groupIcon,
           status: true,
         },
@@ -119,6 +107,9 @@ const GroupSetup = () => {
 
     if (data) {
       const groupID = data[0].id;
+      if (membersID.includes(currentUser.id) !== true) {
+        membersID = [...membersID, currentUser.id];
+      }
 
       const groupData = Promise.all(
         membersID.map(async (ID: string) => {
@@ -135,17 +126,14 @@ const GroupSetup = () => {
         })
       );
       groupData
-        .then((data) => {
+        .then(() => {
           setAddedGroup(true);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("error creating group", error);
         });
-      console.clear();
-      console.log("data: ", data);
-      console.log("data[0].id: ", data[0].id);
-      console.log("groupData: ", groupData);
       setShowCreateGroupe(false);
+      
     }
   };
 
@@ -153,6 +141,7 @@ const GroupSetup = () => {
     <div
       ref={ref}
       className="relative p-0 bg-bgGray text-[14px] h-[80vh] border-r border-r-[[#444e54]] "
+      
     >
       {/* //** add profile image and profile name here  */}
       <CardWithoutTitleB
@@ -183,8 +172,8 @@ const GroupSetup = () => {
             <input
               type="text"
               className="inputprofile w-full pl-0 px-2 py-0 text-[#242f36] text-md focus:outline-none focus:ring-none focus:border-none"
-              onChange={(e) => setProfileName(e.target.value)}
-              value={profileName}
+              onChange={(e) => setGroupName(e.target.value)}
+              value={groupName}
               placeholder="Group Subject (Optional)"
             />
 

@@ -20,9 +20,9 @@ export const getMessages = async (
 
   if (error) return;
 
-  console.log("this is received messages: ", messages);
+  // console.log("this is received messages: ", messages);
   if (data) {
-    console.log("this is sent messages: ", data);
+    // console.log("this is sent messages: ", data);
     if (current_user_id !== receiver_room_id)
       return shuffleArr([...data, ...messages]);
 

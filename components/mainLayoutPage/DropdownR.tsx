@@ -15,11 +15,10 @@ export interface IAppProps {
 const DropDownR = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
   console.log("in the drop d");
   // const [selectedFile, setSelectedFile] = useState(null);
-  // const hiddenFileInputRef = useRef()!;
-  const hiddenFileInputRef = React.useRef<HTMLInputElement>(null);
+  const hiddenFileInputRef = useRef()!;
   const { setShowCamera } = useWhatSappContext();
-  const { opendocs, setOpendocs } = useWhatSappContext();
-  const { openImage, setOpenImage } = useWhatSappContext();
+  const { setOpendocs } = useWhatSappContext();
+  const { setOpenImage } = useWhatSappContext();
 
   const handleFileChange = async (event: any) => {
     const file = event.target.files[0];

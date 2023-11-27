@@ -1,9 +1,6 @@
 "use client";
 // import Image from "next/image";
 import React, { useState } from "react";
-// import { CiMenuKebab } from "react-icons/ci";
-// import { GrSettingsOption } from "react-icons/gr";
-// import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import Pulsation from "./component/PulseLoader";
@@ -65,5 +62,4 @@ const Signupb = () => {
     </div>
   );
 };
-
 export default Signupb;

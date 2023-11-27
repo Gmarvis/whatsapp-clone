@@ -9,7 +9,6 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 // icon imports
 import { FaCircleArrowRight } from "react-icons/fa6";
 import GroupSetup from "./GroupSetup";
-import { supabase } from "@/utils/supabase/client";
 import { User } from "@/type";
 
 type Props = {
@@ -17,28 +16,21 @@ type Props = {
   users: User[];
 };
 
-//  interface User {
-//    created_at: string;
-//    email: string;
-//    id: string;
-//    image: string;
-//    name: string;
-//    phone: null;
-//  }
-
-const CreateGroup = ({ users, currentUser }: Props) => {
+const CreateGroup = ({ users }: Props) => {
   // const [users, setUsers] = useState<Array<{}>>([]);
   const [members, setMembers] = useState<Array<User>>(
     LOCAL_STORAGE.get("group_members") || []
   );
 
-  // const currentUser = LOCAL_STORAGE.get("sender") || {};
-  const [membersID, setMembersId] = useState<Array<string>>([]);
-  const [showNextBtn, setShowNextBtn] = useState(false);
   const [groupSetup, setGroupSetup] = useState(true);
   const [notify, setNotify] = useState<string>("");
+  const [userData, setUserData] = useState<Array<User>>([]);
+  const [membersID, setMembersId] = useState<Array<string>>([]);
+  const [showNextBtn, setShowNextBtn] = useState(false);
+
 
   useEffect(() => {
+    setUserData(users);
     LOCAL_STORAGE.save("group_members", []);
     setMembers([]);
   }, []);
@@ -81,6 +73,19 @@ const CreateGroup = ({ users, currentUser }: Props) => {
 
   const openGroupSetup = () => {
     setGroupSetup((prev) => !prev);
+  };
+
+  // handeFilter
+  const handleFilter = (event: { target: { value: any } }) => {
+    const searchName = event.target.value;
+
+    const newFilter = users.filter((user) => {
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
+    });
+    if (newFilter.length === 0 || searchName === "") {
+      setUserData(users);
+    }
+    setUserData(newFilter);
   };
 
   return (
@@ -126,13 +131,14 @@ const CreateGroup = ({ users, currentUser }: Props) => {
                 className="w-full border-b outline-none p-2"
                 type="search"
                 placeholder="search name or number"
+                onChange={handleFilter}
               />
             </div>
             <div></div>
             <div className="px-3 h-[60vh] overflow-auto">
               {users && (
                 <div className="flex gap-2 w-full flex-col ">
-                  {users?.map((item: any) => (
+                  {userData?.map((item: any) => (
                     <div
                       onClick={() => handleDirectMessage(item)}
                       key={item.id}

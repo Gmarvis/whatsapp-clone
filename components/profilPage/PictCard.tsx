@@ -111,4 +111,4 @@ const PictCard = ({ profilepict, setProfilPict, setImportPict }: Props) => {
   );
 };
 
-export default PictCard;
+export default React.memo(PictCard);
