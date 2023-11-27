@@ -12,14 +12,14 @@ export const updateUnreadMessageCount = async (
     .match({ sender_id: sender_id, receiver_room_id: receiver_room_id })
     .single();
 
-  // const dbvalue = !data ? 1 : data.unread_count + 1;
+  const dbvalue = !data ? 1 : data.unread_count + 1;
   const unreadMessages: PostgrestSingleResponse<null> = await supabase
     .from("unread_messages")
     .upsert(
       {
         sender_id: sender_id,
         receiver_room_id: receiver_room_id,
-        unread_count: value === 0 ? value : !data ? 1 : data.unread_count + 1,
+        unread_count: value === 0 ? value : dbvalue,
       },
       {
         onConflict: "sender_id, receiver_room_id ",

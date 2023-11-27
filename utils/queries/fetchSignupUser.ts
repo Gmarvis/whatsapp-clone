@@ -19,8 +19,3 @@ const fetchSignupUser = async (email: string) => {
   return data as User;
 };
 export default fetchSignupUser;
-
-export const swap = (arr: User[], index1: number, index2: number) => {
-  arr[index1] = arr.splice(index2, 1, arr[index1])[0];
-  return arr;
-};
