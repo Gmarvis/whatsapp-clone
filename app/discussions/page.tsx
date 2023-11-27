@@ -50,7 +50,7 @@ import { updateUnreadMessageCount } from "@/utils/queries/updateUnreadMessageCou
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
 
-  const email: string = JSON.parse(localStorage.getItem("email") as string);
+  const email: string = localStorage.getItem("email") as string;
   const [users, setUsers] = useState<User[]>([]);
   // state containing the user info
   const [currentUser, setCurrentUser] = useState<User>(() =>
@@ -80,7 +80,7 @@ const Discossions = () => {
 
   const { showCreateGroup } = useProfileContext();
 
-  // console.log(email);
+  // if (!email && !currentUser) router.push("/");s
   const {
     setOpenSideNav,
     openSideNav,
@@ -145,6 +145,7 @@ const Discossions = () => {
     return () => document.removeEventListener("click", handleClickOutSide);
   }, [addedGroup]);
 
+  // console.log("these are groups", groups);
   useEffect(() => {
     setDiscussionsMessages([]);
     getMessages(

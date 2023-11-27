@@ -9,7 +9,11 @@ import {
 import { WhatSappContactContextProvider } from "@/components/context/Context";
 import { ProfileContextProvider } from "@/components/context/profileContext";
 import Pulsation from "./[signup]/component/PulseLoader";
+// import { CssBaseline } from "@mui/material";
 import { Suspense, useState } from "react";
+// import { ThemeProvider } from "@mui/material/styles";
+import { darkTheme, lightTheme } from "@/utils/service/theme";
+import Header from "@/components/profilPage/Header";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
