@@ -85,7 +85,7 @@ const GroupSetup = () => {
   const handleCreateGroup = async () => {
     const groupMembers = LOCAL_STORAGE.get("group_members");
     const currentUser = LOCAL_STORAGE.get("sender");
-    let membersID = groupMembers.map((member: User) => member.id);
+    const membersID = groupMembers.map((member: User) => member.id);
 
     const { data, error } = await supabase
       .from("rooms")
