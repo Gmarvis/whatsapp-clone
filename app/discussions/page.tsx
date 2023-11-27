@@ -342,7 +342,8 @@ let i = 0;
         <>
           <UploadPicture />
           <div className={importPict ? "hidden" : "flex w-full "}>
-            <div className="bg-white w-[25vw] h-[10%]">
+            
+            <div className="bg-white w-[25vw] h-screen">
               <ProfilePage title="Profil">
                 <ProfilePageContent />
               </ProfilePage>
@@ -385,7 +386,7 @@ let i = 0;
                     user2.unread_count - user1.unread_count
                 )}
                 setReceiver={setReceiver}
-                className=" overflow-y-auto h-full p-0"
+                className=" overflow-y-auto h-fit bg-blue-500"
                 setRoomObject={setRoomObject}
                 setUsers={setUsers}
                 setRecipient={setRecipient}
