@@ -9,7 +9,7 @@ import { useWhatSappContext } from "../context";
 
 export interface IAppProps {
   setDocsopen: React.Dispatch<SetStateAction<string>>;
-  RefObject: string;
+  // RefObject: string;
 }
 
 const DropDownR = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
@@ -100,6 +100,8 @@ const DropDownR = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
       ref={ref}
       className="absolute mb-[35vh] py-2 w-[250px] bg-white shadow-xl  delay-7000 transform transition-duration-10000   translate-x-12 -scale-20  ease-in-out rounded-[16px] font-sans font-medium"
     >
+      <p>jvhgvkgvkuvbkubv</p>
+      <input type="file" />
       <li
         onClick={() => setOpendocs((prev: any) => !prev)}
         className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center "
@@ -122,7 +124,6 @@ const DropDownR = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
       </li>
       <li
         onClick={() => setOpenImage((prev: any) => !prev)}
-        id="photo"
         className="w-64  text-sm capitalize text-gray-700 hover:bg-bgGray hover:text-black py-[10px] px-[24px] hover:w-full cursor-pointer  nowrap flex items-center"
       >
         <input

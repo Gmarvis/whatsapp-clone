@@ -15,7 +15,7 @@ type Props = {
   publicUrl: string;
 };
 
-const Imageupload = ({ currentUser, receiver }: Props) => {
+const Imageupload = ({ currentUser, receiver, publicUrl }: Props) => {
   if (typeof localStorage === "undefined") return;
 
   const { openImage, setOpenImage } = useWhatSappContext();
@@ -48,7 +48,7 @@ const Imageupload = ({ currentUser, receiver }: Props) => {
     const sendingMessage: Message = {
       sender_id: currentUser.id as string,
       receiver_room_id: receiver?.id as string,
-      content: message,
+      content: publicUrl,
       sender_name: currentUser?.name,
       phone_number: currentUser?.phone as string,
     };

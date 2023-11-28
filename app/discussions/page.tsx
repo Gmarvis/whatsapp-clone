@@ -82,9 +82,7 @@ const Discossions = () => {
   const [lastMessage, setLastMessage] = useState<Message>();
 
   const { showCreateGroup } = useProfileContext();
-
   const [docsopen, setDocsopen] = useState("");
-
   // console.log(email);
   const {
     setOpenSideNav,
