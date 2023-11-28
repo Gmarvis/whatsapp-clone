@@ -7,7 +7,6 @@ const fetchGroupsOfSingleUser = async (userId: string | undefined) => {
       .select("*")
       .eq("user_id", userId);
     if (data) {
-      // console.log("these are groups to which you belong", data);
       return data;
     }
   } catch (error) {

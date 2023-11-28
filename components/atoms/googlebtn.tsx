@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Pulsation from "@/app/[signup]/component/PulseLoader";
 import { supabase } from "@/utils/supabase/client";
 import Image from "next/image";
@@ -17,10 +17,9 @@ const urlToUse = () => {
 };
 
 const GoogleButton = () => {
-  const [isLoading, setIsLoading] = useState<Boolean>(false)
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const handleGoogleSignin = async () => {
-    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -31,15 +30,19 @@ const GoogleButton = () => {
         redirectTo: urlToUse(),
       },
     });
-    setIsLoading(true)
-  };  
+    setIsLoading(true);
+  };
 
   return (
     <div>
-      {isLoading ? <Pulsation/> : <button
+      <button
         onClick={() => handleGoogleSignin()}
         data-u
-        className={isLoading ? "hover:cursor-not-allowed" : "flex border border-themecolor text-xl items-center rounded p-4 gap-3 px-8   font-bold m-auto"}
+        className={
+          isLoading
+            ? "hover:cursor-not-allowed"
+            : "flex border border-themecolor text-xl items-center rounded p-4 gap-3 px-8   font-bold m-auto"
+        }
       >
         <Image
           height={40}
@@ -47,9 +50,8 @@ const GoogleButton = () => {
           alt="google logo"
           src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         />
-        <p>Sign In with Google</p>
-      </button>}
-      
+        <p>{isLoading ? <Pulsation /> : "Sign In with Google"}</p>
+      </button>
     </div>
   );
 };

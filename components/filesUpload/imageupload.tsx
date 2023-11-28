@@ -67,7 +67,7 @@ const Imageupload = ({ currentUser, receiver, publicUrl }: Props) => {
   };
 
   return (
-    <div className="relative bg-gray-50 h-[100vh]">
+    <div className="relative bg-gray-50 h-[70vh]">
       <div className="bg-gray-100 py-4 px-4">
         <IoMdClose
           onClick={handleClose}

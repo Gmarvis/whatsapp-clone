@@ -66,27 +66,27 @@ const ProfilePageContent = () => {
     if (name !== "") {
       updateUserName(name)
         .then((res) => {
-          toast.success("Updated successfully", { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+          toast.success("Updated successfully", { autoClose: 1500, position: toast.POSITION.TOP_RIGHT, hideProgressBar: true })
         })
         .catch((err) => {
           if (err instanceof Error) console.log(err)
-          toast.error('Failed to update name', { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+          toast.error('Failed to update name', { autoClose: 1500, position: toast.POSITION.TOP_RIGHT, hideProgressBar: true })
         })
       console.log("profile name", profileName);
       setShowInput1((prev) => !prev);
     } else {
-      toast.error('Field cannot be empty', { autoClose: 1500, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+      toast.error('Field cannot be empty', { autoClose: 1500, position: toast.POSITION.TOP_RIGHT, hideProgressBar: true })
     }
   };
 
   const handleUpdatePhone = (phone: string | undefined) => {
     setShowInput((prev) => !prev)
     if (phone === "") {
-      toast.error('Field cannot be empty', { autoClose: 2000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+      toast.error('Field cannot be empty', { autoClose: 2000, position: toast.POSITION.TOP_RIGHT, hideProgressBar: true })
     } else {
       updatePhoneNumber(phone)
         .then((res) => {
-          toast.success("Updated successfully", { autoClose: 2000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+          toast.success("Updated successfully", { autoClose: 2000, position: toast.POSITION.TOP_RIGHT, hideProgressBar: true })
         })
         .catch((err) => {
           if (err instanceof Error) console.log(err)
@@ -108,7 +108,7 @@ const ProfilePageContent = () => {
         }
         ref={dropdownRef}
       />
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className=" rest">
 
         <div className=" flex flex-col gap-2 w-full pl-7 px-7  py-3  shadow shadow-zinc-200 bg-white">

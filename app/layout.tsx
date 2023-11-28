@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html dir="ltr" lang="en">
       <body>
-        <div className="flex flex-col overflow-hidden h-screen absolute w-[100vw] items-center bg-[#E1E1DE]">
+        <div className="flex flex-col overflow-hidden h-screen absolute w-[100vw] items-center">
           <div className=" h-[32vh] w-full bg-themecolor absolute top-0 "></div>
           <div className=" flex flex-col items-center w-full mx-auto relative ">
             <WhatSappContextProvider>

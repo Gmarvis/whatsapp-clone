@@ -25,9 +25,7 @@ const CreateGroup = ({ users }: Props) => {
   const [groupSetup, setGroupSetup] = useState(true);
   const [notify, setNotify] = useState<string>("");
   const [userData, setUserData] = useState<Array<User>>([]);
-  const [membersID, setMembersId] = useState<Array<string>>([]);
   const [showNextBtn, setShowNextBtn] = useState(false);
-
 
   useEffect(() => {
     setUserData(users);
@@ -134,7 +132,6 @@ const CreateGroup = ({ users }: Props) => {
                 onChange={handleFilter}
               />
             </div>
-            <div></div>
             <div className="px-3 h-[60vh] overflow-auto">
               {users && (
                 <div className="flex gap-2 w-full flex-col ">
