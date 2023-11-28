@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../components/Avatar";
 import { MdGroups2 } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
@@ -37,15 +38,8 @@ import CreateGrt from "@/components/profilPage/CreateGrt";
 import CreateGroup from "@/components/createGroup/CreateGroup";
 import { getGroupMembers } from "@/utils/queries/getGroupMembers";
 import DOMPurify from "isomorphic-dompurify";
-import fetchGroupsOfSingleUser from "@/utils/queries/fetchGroupsOfSingleUser";
-import getAllGroupsPerUser from "@/utils/queries/getAllGroups";
-// import fetchUserGoups from "@/utils/queries/fetchAllUserGroups";
-import { LOCAL_STORAGE } from "@/utils/service/storage";
-import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 
-import { updateUnreadMessageCount } from "@/utils/queries/updateUnreadMessageCount";
+import { useRouter } from "next/navigation";
 
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
@@ -53,9 +47,12 @@ const Discossions = () => {
   const email: string = JSON.parse(localStorage.getItem("email") as string);
   const [users, setUsers] = useState<User[]>([]);
   // state containing the user info
+  // state containing the user info
   const [currentUser, setCurrentUser] = useState<User>(() =>
     JSON.parse(localStorage.getItem("sender") || "{}")
   );
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [rooms, setRooms] = useState<Promise<any[] | undefined>[]>([]);
   const [userInGroupsCreations, setUserInGroupsCreations] = useState<User[]>(
     []
   );
@@ -78,9 +75,9 @@ const Discossions = () => {
   const [showMessageEmoji, setMessageEmoji] = useState<boolean>(false);
   const [lastMessage, setLastMessage] = useState<Message>();
 
-  const { showCreateGroup } = useProfileContext();
+  const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
 
-  console.log(email);
+  // console.log(email);
   const {
     setOpenSideNav,
     openSideNav,
@@ -144,6 +141,7 @@ const Discossions = () => {
       ref.current.addEventListener("click", handleClickOutSide);
     return () => document.removeEventListener("click", handleClickOutSide);
   }, [addedGroup]);
+  // console.log("this is currentUser", currentUser);
 
   // console.log("these are groups", groups);
   useEffect(() => {
@@ -203,8 +201,7 @@ const Discossions = () => {
   }, [receiver?.id]);
 
   const sendMessageToDB = async () => {
-    if (message === "" || !receiver?.id) {
-      toast.warning('Field cannot be empty', { autoClose: 1000, position: toast.POSITION.TOP_CENTER, hideProgressBar: true })
+    if (!message || !receiver?.id) {
       console.log("message or receiver of the message can not be empty");
       return;
     }

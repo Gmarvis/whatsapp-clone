@@ -30,15 +30,9 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
 
   const uldd = document.getElementById("uldropdown") as HTMLUListElement;
 
-  const {
-    setShowPPicture,
-    groupIcon,
-    setGroupIcon,
-    setProfilPict,
-    setImportPict,
-    setSendingFile,
-  } = useWhatSappContext();
-  const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
+  const { setShowPPicture, setProfilPict, setImportPict, setSendingFile } =
+    useWhatSappContext();
+  const { setShowCreateGroupe } = useProfileContext();
   const { setOpenContactInfo } = useWhatSappContactContext();
 
   const handleLink = (value: string) => {

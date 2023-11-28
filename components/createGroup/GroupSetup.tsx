@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 // import { useWhatSappContext } from "../context";
 import EmojiePicker from "../profilPage/EmojiePicker";
@@ -12,7 +14,6 @@ import { supabase } from "@/utils/supabase/client";
 
 import CardWithoutTitleB from "./CardWithoutTitleB";
 import { useProfileContext } from "../context/profileContext";
-import { useWhatSappContext } from "@/components/context";
 
 const GroupSetup = () => {
   const [shosenEmojiesup, setShosenEmojiesup] = useState<string[]>([]);
@@ -21,12 +22,12 @@ const GroupSetup = () => {
   // * change the name david beckamp by the user name
   const [groupName, setGroupName] = useState<string>("");
 
+  const [groupName, setGroupName] = useState<string>("");
+
   const [showDropdrownProfile, setShowDropdownProfile] = useState(false);
 
-  const {groupIcon, profileImage, setAddedGroup } = useWhatSappContext();
+  const { profileImage, setAddedGroup } = useWhatSappContext();
   const { setShowCreateGroupe } = useProfileContext();
-
-  // const { groupIcon, setGroupIcon } = useWhatSappContext();
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -92,8 +93,7 @@ const GroupSetup = () => {
       .insert([
         {
           name: groupName,
-          created_by: currentUser.id,
-          image: groupIcon,
+          image: currentUser.image,
           status: true,
         },
       ])
@@ -186,6 +186,16 @@ const GroupSetup = () => {
               </span>
             </div>
           </div>
+        </div>
+        <div className="">
+          <button className="flex items-center justify-between bg-white w-full px-7 pt-4 pb-5">
+            <p className="flex flex-col self-start text-start">
+              <span>Disappearing Measages</span>
+              <span>off</span>
+            </p>
+
+            <IoIosArrowForward />
+          </button>
         </div>
 
         <div className="flex justify-center w-full pb-10">

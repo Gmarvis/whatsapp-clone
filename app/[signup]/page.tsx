@@ -10,10 +10,10 @@ const Signupb = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isloading, setIsloading] = useState(false);
 
   const handleInputChange = async () => {
-    setIsLoading(true);
+    setIsloading(true);
     const googleUser = JSON.parse(
       localStorage.getItem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}"
     );
@@ -34,33 +34,6 @@ const Signupb = () => {
     console.log("data from DB", data);
 
     router.push("/discussions");
-
-    // const email = localStorage.getItem("email");
-    // const random = one + two + three + four + five + six;
-    // let code = JSON.stringify(params.signup);
-    // let sentCode = code.slice(10, 16);
-
-    // if (random == sentCode) {
-    //   const { data, error } = await supabase
-    //     .from("user")
-    //     .insert({ email: email });
-
-    //   console.log(data);
-
-    //   if (error) {
-    //     console.log(error);
-    //     setError("Email address already exist");
-    //     setIsloading(false);
-    //     return;
-    //   }
-    //   //  if (data) console.log(data);
-    //   router.push("/discussions");
-    // } else {
-    //   setError("Invalid code");
-    //   console.log("invalid");
-    //   setIsloading(false);
-    //   return;
-    // }
   };
 
   return (
