@@ -40,6 +40,8 @@ import { getGroupMembers } from "@/utils/queries/getGroupMembers";
 import DOMPurify from "isomorphic-dompurify";
 
 import { useRouter } from "next/navigation";
+import { updateUnreadMessageCount } from "@/utils/queries/updateUnreadMessageCount";
+import { addUnreadMessageCountToUser } from "@/utils/queries/addUnreadMessagesCountToUser";
 
 const Discossions = () => {
   if (typeof localStorage === "undefined") return;
@@ -74,8 +76,9 @@ const Discossions = () => {
   const [discussionsMessages, setDiscussionsMessages] = useState<Message[]>([]);
   const [showMessageEmoji, setMessageEmoji] = useState<boolean>(false);
   const [lastMessage, setLastMessage] = useState<Message>();
+  const [lastMessage, setLastMessage] = useState<Message>();
 
-  const { showCreateGroup, setShowCreateGroupe } = useProfileContext();
+  const { showCreateGroup } = useProfileContext();
 
   // console.log(email);
   const {
@@ -141,9 +144,7 @@ const Discossions = () => {
       ref.current.addEventListener("click", handleClickOutSide);
     return () => document.removeEventListener("click", handleClickOutSide);
   }, [addedGroup]);
-  // console.log("this is currentUser", currentUser);
 
-  // console.log("these are groups", groups);
   useEffect(() => {
     setDiscussionsMessages([]);
     getMessages(
@@ -231,9 +232,18 @@ let i = 0;
       "postgres_changes",
       { event: "*", schema: "public", table: "messages" },
       async (payload: any) => {
+      async (payload: any) => {
         console.log("Change received!", payload);
         setLastMessage(payload.new);
-     
+
+        updateUnreadMessageCount(
+          payload.new.sender_id,
+          payload.new.receiver_room_id
+        )
+          .then((data) => {
+            if (data) console.log("update unread message count", data);
+          })
+          .catch((err) => console.log(err));
 
         if (payload.eventType === "UPDATE") {
           updateUnreadMessageCount(
@@ -389,17 +399,13 @@ let i = 0;
                 </div>
               </div>
               <DirectMessage
-                users={users?.sort(
-                  (user1: any, user2: any) =>
-                    user2.unread_count - user1.unread_count
-                )}
+                users={users}
                 setReceiver={setReceiver}
                 className=" overflow-y-auto h-full p-0"
                 setRoomObject={setRoomObject}
                 setUsers={setUsers}
                 setRecipient={setRecipient}
                 lastMessage={lastMessage as Message}
-                currentUserRoomId={currentUserRoomId as string}
               />
             </div>
 

@@ -21,16 +21,15 @@ export const updateReadMessageStatus = async (
       readStatus.error
     );
 
-    await supabase
-    .from("unread_messages")
-    .update(
-      {      
-        unread_count: 0,
-        last_message: "",
-      },
-      
-    ).match({ sender_id: sender_id,
-      receiver_room_id: receiver_room_id});
+  updateUnreadMessageCount(sender_id, receiver_room_id, 0)
+    .then((data) => {
+      if (data)
+        console.log("reinitializing the counter of unread messages: ", data);
+    })
+    .catch((err) => {
+      if (err instanceof Error)
+        console.log("error initializing the counter of unread messages: ", err);
+    });
 
   return readStatus;
 };

@@ -8,7 +8,7 @@ export const getGroupMembers = async (groupId: string) => {
       .eq("room_id", groupId);
 
     if (data) {
-      console.log(" the members of the group: ", data);
+      // console.log(" the members of the group: ", data);
       //subscribe all the member to group
       data?.map((member) => {
         const subscribe = supabase
