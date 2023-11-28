@@ -2,41 +2,318 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 200 20% 98%;
-    --btn-background: 200 10% 91%;
-    --btn-background-hover: 200 10% 89%;
-    --foreground: 200 50% 3%;
+/* * css for message box arrows */
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: 200 50% 3%;
-      --btn-background: 200 10% 9%;
-      --btn-background-hover: 200 10% 12%;
-      --foreground: 200 20% 96%;
-    }
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 
-@layer base {
-  * {
-    @apply border-foreground/20;
-  }
+.box {
+  width: fit-content;
+  height: auto;
+  background-color: hsla(0, 0%, 100%, 0.95);
+  color: #0b0c0d;
+  padding: 3px 5px;
+  position: relative;
+  float: left;
+  border-radius: 12px;
+  font-size: 15px;
+  border: 1px solid rgb(226, 218, 218);
+  box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
 }
 
-.animate-in {
-  animation: animateIn 0.3s ease 0.15s both;
+.box-row {
+  background-color: #d9fdd3;
+  justify-items: flex-end;
 }
 
-@keyframes animateIn {
+.box.arrow-right {
+  margin-top: 10px;
+  border-top-left-radius: 12px;
+  background-color: #d9fdd3;
+}
+
+.box.arrow-left {
+  margin-top: 10px;
+  border-top-right-radius: 12px;
+  background-color: hsla(0, 0%, 100%, 0.95);
+}
+
+.box.arrow-right:after {
+  content: " ";
+  position: absolute;
+  right: -10px;
+  top: -3px;
+  border-top: none;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: 15px solid #d9fdd3;
+  transform: rotate(-48deg);
+}
+
+.box.arrow-left:after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: -10px;
+  border-top: 15px solid transparent;
+  border-right: 14px solid hsla(0, 0%, 100%, 0.95);
+  border-left: none;
+  border-bottom: 15px solid transparent;
+  transform: rotate(136deg);
+}
+
+/* * css for switch button on the contact info page */
+
+.switch-button {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch-button input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch-button .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 8px;
+}
+
+.switch-button input:checked + .slider {
+  background-color: #667781;
+}
+
+.switch-button .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: -2px;
+  top: -3px;
+  right: -2px;
+  bottom: 2px;
+  background-color: #e1e3e4;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.switch-button input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* *css for contact info page appearing animations */
+
+.card {
+  max-width: 100%;
+  height: fit-content;
+  animation: card-appear 0.7s ease-out forwards;
+  top: 18vw;
+  left: 0;
+}
+
+@keyframes card-appear {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(-3rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.profil {
+  height: fit-content;
+  animation: sideNav-appear 0.2s ease-out forwards;
+}
+
+@keyframes sideNav-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-25vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cardprofil {
+  animation: cardprofil 800ms ease-out;
+}
+
+@keyframes cardprofil {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.rest {
+  max-width: 100%;
+  height: fit-content;
+  animation: rest-appear 0.7s ease-out forwards;
+  top: 18vw;
+  left: 0;
+}
+
+@keyframes rest-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profiloff {
+  height: fit-content;
+  animation: profiloff-appear 0.5s ease-in forwards;
+}
+
+@keyframes profiloff-appear {
+  from {
+    transform: translateX(-25vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pulsating-circle {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-130%) translateY(-50%);
+  width: 30px;
+  height: 30px;
+
+  &::before {
+    content: "";
+    position: relative;
+    display: block;
+    width: 300%;
+    height: 300%;
+    box-sizing: border-box;
+    margin-left: -100%;
+    margin-top: -100%;
+    border-radius: 45px;
+    background-color: #01a4e9;
+    animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+/* The Modal (background) */
+/* .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  padding-top: 200px; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4); 
+} */
+
+.modalEmojie {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+@-webkit-keyframes animatetop {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+@keyframes animatetop {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+.add-user ::-webkit-scrollbar {
+  display: none;
 }
